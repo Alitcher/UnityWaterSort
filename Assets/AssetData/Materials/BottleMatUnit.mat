@@ -45,7 +45,15 @@ Material:
     m_Floats:
     - _FillAmount: 15
     - _Liquid_Level: 0
+    - _SARM: 1
+    - _ScaleFactor: 5
+    - _WaterPortion: 7
+    - _WaterScaleRotationMultiplier: 1
     m_Colors:
+    - _C1: {r: 0.78431374, g: 0.0627451, b: 0.18039216, a: 1}
+    - _C2: {r: 1, g: 0.53708243, b: 0, a: 1}
+    - _C3: {r: 1, g: 0.97219944, b: 0, a: 1}
+    - _C4: {r: 0.5498713, g: 1, b: 0, a: 1}
     - _Color01: {r: 0.22075468, g: 0.5440891, b: 1, a: 1}
     - _Color02: {r: 0.9056604, g: 0.27682447, b: 0.27682447, a: 1}
     - _Color03: {r: 1, g: 0.8097839, b: 0.44716978, a: 1}
