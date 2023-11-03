@@ -18,11 +18,11 @@ public class BottleController : MonoBehaviour
 
     private Vector3 startPosition;
     private Vector3 selectedPosition;
-    private Vector3 targetPosition, smoothVector = Vector3.zero;
+    private Vector3 targetPosition;
 
     void Start()
     {
-        startPosition = transform.position;
+        startPosition = transform.position * 1.0f;
         selectedPosition = new Vector3(startPosition.x, startPosition.y + 10f, startPosition.z);
 
         instanceMaterial = bottleMaskSR.material;
@@ -40,31 +40,46 @@ public class BottleController : MonoBehaviour
         //    StartCoroutine(RotateBottle());
         //}
 
+
+        //TODO change targetposition and rotation to pivot around target bottle and selected bottle corner
+
         if (selected & transform.position != selectedPosition & movingStep == 0) // moving up when selected
         {
-            goTo(selectedPosition);
+            transform.position = goTo(selectedPosition, 1.0f);
         }
         if (!selected & transform.position != startPosition & movingStep == 0) // moving down when unselected
         {
-            goTo(startPosition);
+            transform.position = goTo(startPosition, 1.0f);
         }
 
-        if (movingStep == 1 & transform.position != targetPosition) // moving to other bottle
+        if (movingStep == 1 & transform.eulerAngles.z != targetRotation) // moving to other bottle
         {
-            goTo(targetPosition);
-            Quaternion endROtation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, 90.0f * direction);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, endROtation, 100.0f * Time.deltaTime);
-            if (transform.position == targetPosition & transform.eulerAngles.z == targetRotation)
+            transform.position = goTo(targetPosition, 3.0f);
+            if (transform.position == targetPosition)
             {
                 movingStep = 2;
             }
         }
-        if (movingStep == 2 & transform.position != startPosition) // moving back to original position
+        if (movingStep == 2 & transform.eulerAngles.z != targetRotation) // rotating to pour
         {
-            goTo(startPosition);
-            Quaternion endROtation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, 0.0f);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, endROtation, 100.0f * Time.deltaTime);
-            if (transform.position == startPosition & transform.eulerAngles.z == 0.0f)
+            transform.rotation = rotate(90.0f * direction, 75.0f);
+            if (transform.eulerAngles.z == targetRotation)
+            {
+                movingStep = 3;
+            }
+        }
+        if (movingStep == 3 & transform.eulerAngles.z != 0.0f) // rotating to upright position
+        {
+            transform.rotation = rotate(0.0f, 75.0f);
+            if (transform.eulerAngles.z == 0.0f)
+            {
+                movingStep = 4;
+            }
+        }
+        if (movingStep == 4 & transform.position != startPosition) // moving back to original position
+        {
+            transform.position = goTo(startPosition, 3.0f);
+            if (transform.position == startPosition)
             {
                 movingStep = 0;
                 SetSelected(false);
@@ -72,20 +87,36 @@ public class BottleController : MonoBehaviour
         }
     }
 
-    Vector3 goTo(Vector3 targetPosition)
+    Vector3 goTo(Vector3 targetPosition, float movementSpeed) // increment bottle position towards target position
     {
-        return transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref smoothVector, 0.1f);
+        return Vector3.MoveTowards(transform.position, targetPosition, movementSpeed);
     }
 
-    public void SetSelected(bool selected)
+    Quaternion rotate(float targetRotation, float rotationSpeed) // increment bottle rotation towards target rotation around z-axis
     {
+        Quaternion endROtation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, targetRotation);
+        return Quaternion.RotateTowards(transform.rotation, endROtation, rotationSpeed * Time.deltaTime);
+    }
+
+    public void SetSelected(bool selected) // set this bottle as seleced or not selected and change spriterenderers orders in layers
+    {
+        if (selected)
+        {
+            GetComponent<SpriteRenderer>().sortingOrder = 2;
+            bottleMaskSR.sortingOrder = 2;
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().sortingOrder = 1;
+            bottleMaskSR.sortingOrder = 0;
+        }
         this.selected = selected;
     }
 
-    public void pourTo(Vector3 target)
+    public void pourTo(Vector3 target) // initiate pouring animation
     {
         direction = transform.position.x - target.x > 0 ? direction = 1.0f : direction = -1.0f;
-        targetPosition = target + (transform.right * (direction * 40.0f)) + (transform.up * (bottleMaskSR.bounds.size.y / 2.0f + bottleMaskSR.bounds.size.x));
+        targetPosition = target + (transform.right * (direction * 40.0f)) + (transform.up * (bottleMaskSR.bounds.size.y / 2.0f + bottleMaskSR.bounds.size.x * 1.0f / 2f));
         targetRotation = direction < 0 ? 270.0f : 90.0f;
         movingStep = 1;
     }

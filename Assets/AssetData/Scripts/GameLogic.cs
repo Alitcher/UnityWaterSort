@@ -16,44 +16,37 @@ public class GameLogic : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0)) 
         {
             RaycastHit hit = new RaycastHit();
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit)) // check if ray hit a gameobject with a collider
             {
-                if (!(hit.collider.gameObject == this.gameObject))
+                if (bottleSelected) // check if a bottle is already selected
                 {
-                    if (bottleSelected)
-                    {
-                        if (selectedBottle == hit.collider.gameObject.GetComponent<BottleController>())
-                        {
-                            selectedBottle.SetSelected(false);
-                            bottleSelected = false;
-                        }
-                        else
-                        {
-                            selectedBottle.pourTo(hit.collider.gameObject.transform.position);
-                            selectedBottle.SetSelected(false);
-                            bottleSelected = false;
-                        }
-
+                    if (selectedBottle == hit.collider.gameObject.GetComponent<BottleController>()) // check if ray hit the bottle that is already selected
+                    { // unselect the currently selected bottle
+                        selectedBottle.SetSelected(false);  
+                        bottleSelected = false;
                     }
                     else
-                    {
-                        selectedBottle = hit.collider.gameObject.GetComponent<BottleController>();
-                        selectedBottle.SetSelected(true);
-                        bottleSelected = true;
+                    { // initiate pouring animation from selected bottle to the bottle hit by ray
+                        selectedBottle.pourTo(hit.collider.gameObject.transform.position);
+                        bottleSelected = false;
                     }
+
+                }
+                else
+                { // select the bottle that the ray hit
+                    selectedBottle = hit.collider.gameObject.GetComponent<BottleController>();
+                    selectedBottle.SetSelected(true);
+                    bottleSelected = true;
                 }
             }
-            else
-            {
-                if (bottleSelected)
-                {
-                    selectedBottle.SetSelected(false);
-                    bottleSelected = false;
-                }
+            else if (bottleSelected) // check if a bottle is already slected
+            { // unselect the currently selected bottle
+                selectedBottle.SetSelected(false);
+                bottleSelected = false;
             }
         }
     }
