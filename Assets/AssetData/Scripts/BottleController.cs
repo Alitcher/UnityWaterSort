@@ -113,9 +113,9 @@ public class BottleController : MonoBehaviour
         this.selected = selected;
     }
 
-    public void pourTo(Vector3 target) // initiate pouring animation
+    public void PourTo(Vector3 target) // initiate pouring animation
     {
-        direction = transform.position.x - target.x > 0 ? direction = 1.0f : direction = -1.0f;
+        direction = transform.position.x - target.x > 0 ? 1.0f : -1.0f;
         targetPosition = target + (transform.right * (direction * 40.0f)) + (transform.up * (bottleMaskSR.bounds.size.y / 2.0f + bottleMaskSR.bounds.size.x * 1.0f / 2f));
         targetRotation = direction < 0 ? 270.0f : 90.0f;
         movingStep = 1;
