@@ -9,9 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88c85b83034ac2640a52f3de99a2fc60, type: 3}
-  m_Name: Level0
+  m_Script: {fileID: 11500000, guid: 6878ff444e54c4f4caa9b19df6e88879, type: 3}
+  m_Name: Level2
   m_EditorClassIdentifier: 
-  LevelId: 0
-  BottleCount: 2
-  colorCount: 0
+  LevelId: 2
+  BottleCount: 4
+  BottlePosition:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  colorCount: 3
