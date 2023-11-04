@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
+
 
 public class BottleController : MonoBehaviour
 {
@@ -19,6 +21,9 @@ public class BottleController : MonoBehaviour
     private Vector3 startPosition;
     private Vector3 selectedPosition;
     private Vector3 targetPosition;
+
+
+    private ObjectPool<BottleController> _pool;
 
     void Start()
     {
@@ -128,6 +133,12 @@ public class BottleController : MonoBehaviour
         instanceMaterial.SetColor("_C3", bottleColors.colors[2]);
         instanceMaterial.SetColor("_C4", bottleColors.colors[3]);
     }
+
+    public void SetPool(ObjectPool<BottleController> pool) 
+    {
+        _pool = pool;
+    }
+
 
     //IEnumerator RotateBottle()
     //{
