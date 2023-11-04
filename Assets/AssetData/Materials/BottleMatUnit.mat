@@ -46,7 +46,7 @@ Material:
     - _FillAmount: 15
     - _Liquid_Level: 0
     - _SARM: 1
-    - _ScaleFactor: 2
+    - _ScaleFactor: 1
     - _WaterPortion: 7
     - _WaterScaleRotationMultiplier: 1
     m_Colors:
