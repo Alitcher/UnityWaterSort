@@ -9,11 +9,13 @@ public class GameLogic : MonoBehaviour
     public int CurrentLevel = 0;
     [SerializeField] private ObjectPoolConfig objectPoolConfig;
     [SerializeField] private LevelHolder levelsCollection;
-
+    [SerializeField] private BottlePooler pooler;
 
     private bool bottleSelected = false;
     private BottleController selectedBottle;
 
+
+    [SerializeField] private List<BottleController> bottleGameCollection;
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -28,19 +30,16 @@ public class GameLogic : MonoBehaviour
 
     public void GenerateLevel()
     {
-        //for (int i = 0; i < levelData.BottleCount; i++)
-        //{
-        //    // Try to reuse an object from the pool
-        //    BottleController bottle = objectPool.Get();
+        for (int i = 0; i < levelsCollection.LevelCollection[CurrentLevel].BottleCount; i++)
+        {
+            // Try to reuse an object from the pool
+            BottleController bottle = pooler.objectPool.Get();
+            // Set name and position
+            bottle.name = "bottle-" + i;
+            bottle.transform.position = levelsCollection.LevelCollection[CurrentLevel].BottlePosition[i];
 
-        //    if (bottle != null)
-        //    {
-        //        // Reset any necessary properties or behaviors on the bottle
-        //        bottle.transform.position = transform.position;
-        //        bottle.transform.rotation = transform.rotation;
-        //        bottle.gameObject.SetActive(true);
-        //    }
-        //}
+            bottleGameCollection.Add(bottle);
+        }
     }
 
     void handleBottleMovement() // initiates pouring animation and selects/unselects bottles based on raycasts
@@ -59,7 +58,6 @@ public class GameLogic : MonoBehaviour
                 else
                 { // initiate pouring animation from selected bottle to the bottle hit by ray
                     selectedBottle.PourTo(hit.collider.gameObject.transform.position);
-                    print("tarrget" + hit.collider.gameObject.transform.position);
                     bottleSelected = false;
                 }
             }
