@@ -46,6 +46,7 @@ Material:
     - _FillAmount: 10.2
     - _Liquid_Level: 0
     - _MaxPortion: 3.9
+    - _MidPortion: -2.4
     - _MinPortion: -8.7
     - _SARM: 1
     - _ScaleFactor: 1
