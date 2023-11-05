@@ -47,14 +47,14 @@ public class BottleController : MonoBehaviour
         bottleMaskSR.enabled = false;
         bottleMaskSR.enabled = true;
 
-        ChangeColorsOnSgader();
+        ChangeColorsOnShader();
     }
     public void GenerateColor()
     {
         /*
          generate color logic at start
          */
-        ChangeColorsOnSgader();
+        ChangeColorsOnShader();
     }
 
     public void SetFillIn()
@@ -95,6 +95,7 @@ public class BottleController : MonoBehaviour
     void Update()
     {
         /*
+         * Henrik
          TODO: Play with bottleMaskSR.material.SetFloat("_SARM", <adjust value here>); to smooth out water scailing during the rotation
          The rotation scale, aka _SARM inside shader graph, must be 0.3 when the bottle is at 90 degrees,
                                                         and must be 1.0 when the bottle is at 0 degree(original position).       
@@ -180,14 +181,15 @@ public class BottleController : MonoBehaviour
         movingStep = 1;
     }
 
-    void ChangeColorsOnSgader()
+    void ChangeColorsOnShader()
     {
         // TODO: color index should not be fixed. It should randomize within colorset;
         // Make sure that the color set to randomize is not over ColorCount inside the scriptableObject
-        instanceMaterial.SetColor("_C1", bottleColors.colors[1]);
-        instanceMaterial.SetColor("_C2", bottleColors.colors[2]);
-        instanceMaterial.SetColor("_C3", bottleColors.colors[3]);
+        //
         instanceMaterial.SetColor("_C4", bottleColors.colors[4]);
+        instanceMaterial.SetColor("_C3", bottleColors.colors[3]);
+        instanceMaterial.SetColor("_C2", bottleColors.colors[2]);
+        instanceMaterial.SetColor("_C1", bottleColors.colors[1]);
     }
 
     public void SetPool(ObjectPool<BottleController> pool)
