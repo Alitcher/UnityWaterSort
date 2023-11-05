@@ -6,7 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class GameLogic : MonoBehaviour
 {
-    public static int CurrentLevel = 2;
+    public static int CurrentLevel = 1;
     [SerializeField] private ObjectPoolConfig objectPoolConfig;
     [SerializeField] private LevelHolder levelsCollection;
     [SerializeField] private BottlePooler pooler;
@@ -121,6 +121,7 @@ public class GameLogic : MonoBehaviour
     bool CheckValidSelection()
     {
         /*
+         * * Alicia
          TODO: Check for restrictions. The player can't pick a bottle if:
         1. The bottle is empty
         2. The bottle is being filled in by another bottle at the moment.
@@ -132,6 +133,7 @@ public class GameLogic : MonoBehaviour
     bool CheckValidPour()
     {
         /*
+         * Alicia
          TODO: Check for restrictions. The source bottle cannot pour in the destination bottle if:
         1. The liquid color on top of destination bottle does not match the color on top of the source(selected) bottle.
         2. The destination bottle is full.
