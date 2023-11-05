@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6878ff444e54c4f4caa9b19df6e88879, type: 3}
   m_Name: Level4
   m_EditorClassIdentifier: 
-  LevelId: 2
+  LevelId: 4
   BottleCount: 6
   BottlePosition:
+  - {x: -30, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
+  - {x: 30, y: 0, z: 0}
+  - {x: -30, y: -40, z: 0}
+  - {x: 0, y: -40, z: 0}
+  - {x: 30, y: -40, z: 0}
   colorCount: 4

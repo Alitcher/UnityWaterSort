@@ -15,8 +15,8 @@ MonoBehaviour:
   LevelId: 2
   BottleCount: 4
   BottlePosition:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
+  - {x: -20, y: 20, z: 0}
+  - {x: 20, y: 20, z: 0}
+  - {x: -20, y: -40, z: 0}
+  - {x: 20, y: -40, z: 0}
   colorCount: 3
