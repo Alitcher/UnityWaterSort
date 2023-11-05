@@ -25,6 +25,18 @@ public class BottleController : MonoBehaviour
 
     private ObjectPool<BottleController> _pool;
 
+    private int[] colorIndices = { 0, 0, 0, 0 };
+    /*
+     check ColorSet scriptableObject the number is equivalent to the index of the color. For example:
+        0 = empty, // always be on top most of the bottle. shouldn't be the case where the empty color is at the bottom and on top of it is some other colors.
+        1 = red,
+        ...
+        6 = purple
+     ColorSet
+     */
+
+    private int currentWater; // goes between 0 - 4
+
     void Start()
     {
         startPosition = transform.position * 1.0f;
@@ -36,6 +48,47 @@ public class BottleController : MonoBehaviour
         bottleMaskSR.enabled = true;
 
         ChangeColorsOnSgader();
+    }
+    public void GenerateColor()
+    {
+        /*
+         generate color logic at start
+         */
+    }
+
+    public void SetFillIn()
+    {
+        /*
+         currentWater++;
+         update color
+        ***UPDATE SHADER TOO***
+         */
+    }
+
+    public void SetPourOut()
+    {
+        /*
+         currentWater--;
+         update color
+
+        ***UPDATE SHADER TOO***
+         */
+    }
+
+    void UpdateColor(int top, int color) 
+    {
+        // TODO: UPDATE SHADER TOO
+        colorIndices[top] = color;
+    }
+
+    bool CheckFull() 
+    {
+        for (int i = 0; i < colorIndices.Length; i++)
+        {
+            if(i == 0)
+                return false;
+        }
+        return true;
     }
 
     void Update()
@@ -134,7 +187,7 @@ public class BottleController : MonoBehaviour
         instanceMaterial.SetColor("_C4", bottleColors.colors[3]);
     }
 
-    public void SetPool(ObjectPool<BottleController> pool) 
+    public void SetPool(ObjectPool<BottleController> pool)
     {
         _pool = pool;
     }
