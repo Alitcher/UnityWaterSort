@@ -43,12 +43,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FillAmount: 15
+    - _FillAmount: 10.2
     - _Liquid_Level: 0
+    - _MaxPortion: 3.9
+    - _MidPortion: -2.4
+    - _MinPortion: -8.7
     - _SARM: 1
-    - _ScaleFactor: 2
-    - _WaterPortion: 7
+    - _ScaleFactor: 1
+    - _WaterPortion: 5
     - _WaterScaleRotationMultiplier: 1
+    - _offset: 6.3
+    - _subtractor: 6.3
     m_Colors:
     - _C1: {r: 0.78431374, g: 0.0627451, b: 0.18039216, a: 1}
     - _C2: {r: 1, g: 0.53708243, b: 0, a: 1}

@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
+
 
 public class BottleController : MonoBehaviour
 {
@@ -20,6 +22,21 @@ public class BottleController : MonoBehaviour
     private Vector3 selectedPosition;
     private Vector3 targetPosition;
 
+
+    private ObjectPool<BottleController> _pool;
+
+    private int[] colorIndices = { 0, 0, 0, 0 };
+    /*
+     check ColorSet scriptableObject the number is equivalent to the index of the color. For example:
+        0 = empty, // always be on top most of the bottle. shouldn't be the case where the empty color is at the bottom and on top of it is some other colors.
+        1 = red,
+        ...
+        6 = purple
+     ColorSet
+     */
+
+    private int currentWater; // goes between 0 - 4
+
     void Start()
     {
         startPosition = transform.position * 1.0f;
@@ -32,17 +49,56 @@ public class BottleController : MonoBehaviour
 
         ChangeColorsOnSgader();
     }
+    public void GenerateColor()
+    {
+        /*
+         generate color logic at start
+         */
+        ChangeColorsOnSgader();
+    }
+
+    public void SetFillIn()
+    {
+        /*
+         currentWater++;
+         update color
+        ***UPDATE SHADER TOO***
+         */
+    }
+
+    public void SetPourOut()
+    {
+        /*
+         currentWater--;
+         update color
+
+        ***UPDATE SHADER TOO***
+         */
+    }
+
+    void UpdateColor(int top, int color) 
+    {
+        // TODO: UPDATE SHADER TOO
+        colorIndices[top] = color;
+    }
+
+    bool CheckFull() 
+    {
+        for (int i = 0; i < colorIndices.Length; i++)
+        {
+            if(i == 0)
+                return false;
+        }
+        return true;
+    }
 
     void Update()
     {
-        //if (Input.GetKeyUp(KeyCode.P))
-        //{
-        //    StartCoroutine(RotateBottle());
-        //}
-
-
-        //TODO change targetposition and rotation to pivot around target bottle and selected bottle corner
-
+        /*
+         TODO: Play with bottleMaskSR.material.SetFloat("_SARM", <adjust value here>); to smooth out water scailing during the rotation
+         The rotation scale, aka _SARM inside shader graph, must be 0.3 when the bottle is at 90 degrees,
+                                                        and must be 1.0 when the bottle is at 0 degree(original position).       
+         */
         if (selected & transform.position != selectedPosition & movingStep == 0) // moving up when selected
         {
             transform.position = goTo(selectedPosition, 1.0f);
@@ -63,6 +119,8 @@ public class BottleController : MonoBehaviour
         if (movingStep == 2 & transform.eulerAngles.z != targetRotation) // rotating to pour
         {
             transform.rotation = rotate(90.0f * direction, 75.0f);
+
+            bottleMaskSR.material.SetFloat("_SARM", 0.3f);
             if (transform.eulerAngles.z == targetRotation)
             {
                 movingStep = 3;
@@ -79,6 +137,7 @@ public class BottleController : MonoBehaviour
         if (movingStep == 4 & transform.position != startPosition) // moving back to original position
         {
             transform.position = goTo(startPosition, 3.0f);
+            bottleMaskSR.material.SetFloat("_SARM", 1.0f);
             if (transform.position == startPosition)
             {
                 movingStep = 0;
@@ -116,36 +175,26 @@ public class BottleController : MonoBehaviour
     public void PourTo(Vector3 target) // initiate pouring animation
     {
         direction = transform.position.x - target.x > 0 ? 1.0f : -1.0f;
-        targetPosition = target + (transform.right * (direction * 40.0f)) + (transform.up * (bottleMaskSR.bounds.size.y / 2.0f + bottleMaskSR.bounds.size.x * 1.0f / 2f));
+        targetPosition = target + (transform.right * (direction * 20.0f)) + (transform.up * (bottleMaskSR.bounds.size.y / 2.0f + bottleMaskSR.bounds.size.x * 1.0f / 2f));
         targetRotation = direction < 0 ? 270.0f : 90.0f;
         movingStep = 1;
     }
 
     void ChangeColorsOnSgader()
     {
-        instanceMaterial.SetColor("_C1", bottleColors.colors[0]);
-        instanceMaterial.SetColor("_C2", bottleColors.colors[1]);
-        instanceMaterial.SetColor("_C3", bottleColors.colors[2]);
-        instanceMaterial.SetColor("_C4", bottleColors.colors[3]);
+        // TODO: color index should not be fixed. It should randomize within colorset;
+        // Make sure that the color set to randomize is not over ColorCount inside the scriptableObject
+        instanceMaterial.SetColor("_C1", bottleColors.colors[1]);
+        instanceMaterial.SetColor("_C2", bottleColors.colors[2]);
+        instanceMaterial.SetColor("_C3", bottleColors.colors[3]);
+        instanceMaterial.SetColor("_C4", bottleColors.colors[4]);
     }
 
-    //IEnumerator RotateBottle()
-    //{
-    //    float t = 0;
-    //    float lerpValue;
-    //    float angleValue;
+    public void SetPool(ObjectPool<BottleController> pool)
+    {
+        _pool = pool;
+    }
 
-    //    while (t < rotationTime)
-    //    {
-    //        lerpValue = t / rotationTime;
-    //        angleValue = Mathf.Lerp(0.0f, 75.0f, lerpValue);
 
-    //        transform.eulerAngles = new Vector3(0.0f, 0.0f, angleValue);
-    //        t += Time.deltaTime;
 
-    //        yield return new WaitForEndOfFrame();
-    //    }
-    //    angleValue = 75.0f;
-    //    transform.eulerAngles = new Vector3(0.0f, 0.0f, angleValue);
-    //}
 }
