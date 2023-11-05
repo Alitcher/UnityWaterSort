@@ -40,14 +40,11 @@ public class BottleController : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyUp(KeyCode.P))
-        //{
-        //    StartCoroutine(RotateBottle());
-        //}
-
-
-        //TODO change targetposition and rotation to pivot around target bottle and selected bottle corner
-
+        /*
+         TODO: Play with bottleMaskSR.material.SetFloat("_SARM", <adjust value here>); to smooth out water scailing during the rotation
+         The rotation scale, aka _SARM inside shader graph, must be 0.3 when the bottle is at 90 degrees,
+                                                        and must be 1.0 when the bottle is at 0 degree(original position).       
+         */
         if (selected & transform.position != selectedPosition & movingStep == 0) // moving up when selected
         {
             transform.position = goTo(selectedPosition, 1.0f);
@@ -68,6 +65,8 @@ public class BottleController : MonoBehaviour
         if (movingStep == 2 & transform.eulerAngles.z != targetRotation) // rotating to pour
         {
             transform.rotation = rotate(90.0f * direction, 75.0f);
+
+            bottleMaskSR.material.SetFloat("_SARM", 0.3f);
             if (transform.eulerAngles.z == targetRotation)
             {
                 movingStep = 3;
@@ -84,6 +83,7 @@ public class BottleController : MonoBehaviour
         if (movingStep == 4 & transform.position != startPosition) // moving back to original position
         {
             transform.position = goTo(startPosition, 3.0f);
+            bottleMaskSR.material.SetFloat("_SARM", 1.0f);
             if (transform.position == startPosition)
             {
                 movingStep = 0;
@@ -140,23 +140,5 @@ public class BottleController : MonoBehaviour
     }
 
 
-    //IEnumerator RotateBottle()
-    //{
-    //    float t = 0;
-    //    float lerpValue;
-    //    float angleValue;
 
-    //    while (t < rotationTime)
-    //    {
-    //        lerpValue = t / rotationTime;
-    //        angleValue = Mathf.Lerp(0.0f, 75.0f, lerpValue);
-
-    //        transform.eulerAngles = new Vector3(0.0f, 0.0f, angleValue);
-    //        t += Time.deltaTime;
-
-    //        yield return new WaitForEndOfFrame();
-    //    }
-    //    angleValue = 75.0f;
-    //    transform.eulerAngles = new Vector3(0.0f, 0.0f, angleValue);
-    //}
 }
