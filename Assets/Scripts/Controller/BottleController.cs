@@ -54,6 +54,7 @@ public class BottleController : MonoBehaviour
         /*
          generate color logic at start
          */
+        ChangeColorsOnSgader();
     }
 
     public void SetFillIn()
@@ -181,10 +182,12 @@ public class BottleController : MonoBehaviour
 
     void ChangeColorsOnSgader()
     {
-        instanceMaterial.SetColor("_C1", bottleColors.colors[0]);
-        instanceMaterial.SetColor("_C2", bottleColors.colors[1]);
-        instanceMaterial.SetColor("_C3", bottleColors.colors[2]);
-        instanceMaterial.SetColor("_C4", bottleColors.colors[3]);
+        // TODO: color index should not be fixed. It should randomize within colorset;
+        // Make sure that the color set to randomize is not over ColorCount inside the scriptableObject
+        instanceMaterial.SetColor("_C1", bottleColors.colors[1]);
+        instanceMaterial.SetColor("_C2", bottleColors.colors[2]);
+        instanceMaterial.SetColor("_C3", bottleColors.colors[3]);
+        instanceMaterial.SetColor("_C4", bottleColors.colors[4]);
     }
 
     public void SetPool(ObjectPool<BottleController> pool)
