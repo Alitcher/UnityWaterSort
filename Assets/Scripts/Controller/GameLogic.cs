@@ -6,7 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class GameLogic : MonoBehaviour
 {
-    public int CurrentLevel = 0;
+    public static int CurrentLevel = 0;
     [SerializeField] private ObjectPoolConfig objectPoolConfig;
     [SerializeField] private LevelHolder levelsCollection;
     [SerializeField] private BottlePooler pooler;
@@ -14,22 +14,37 @@ public class GameLogic : MonoBehaviour
     private bool bottleSelected = false;
     private BottleController selectedBottle;
 
-
     [SerializeField] private List<BottleController> bottleGameCollection;
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
             handleBottleMovement();
         }
-        if (Input.GetKeyDown(KeyCode.G))
+
+        #region Debug Control
+        if (Input.GetMouseButtonDown(1))
+        {
+            DestroyAllBottles();
+        }
+        if (Input.GetMouseButtonDown(2))
         {
             GenerateLevel();
         }
+        #endregion
+    }
+
+    private void Start()
+    {
+        DestroyAllBottles(); // destroy all bottles before restart the scene
+        GenerateLevel();
     }
 
     public void GenerateLevel()
     {
+
+        // Generate bottles
         for (int i = 0; i < levelsCollection.LevelCollection[CurrentLevel].BottleCount; i++)
         {
             // Try to reuse an object from the pool
@@ -40,6 +55,16 @@ public class GameLogic : MonoBehaviour
 
             bottleGameCollection.Add(bottle);
         }
+    }
+
+    public void DestroyAllBottles() 
+    {
+        for (int i = 0; i < bottleGameCollection.Count; i++)
+        {
+            pooler.objectPool.Release(bottleGameCollection[i]);
+        }
+
+        bottleGameCollection.Clear();
     }
 
     void handleBottleMovement() // initiates pouring animation and selects/unselects bottles based on raycasts
