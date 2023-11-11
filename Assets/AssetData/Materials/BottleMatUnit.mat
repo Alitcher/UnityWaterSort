@@ -43,11 +43,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FillAmount: 10.2
+    - _FillAmount: 10
     - _Liquid_Level: 0
-    - _MaxPortion: 3.9
-    - _MidPortion: -2.4
-    - _MinPortion: -8.7
+    - _MaxPortion: 3.75
+    - _MidPortion: -2.5
+    - _MinPortion: -8.75
     - _SARM: 1
     - _ScaleFactor: 1
     - _WaterPortion: 5
