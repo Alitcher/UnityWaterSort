@@ -6,6 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class GameLogic : MonoBehaviour
 {
+    public const int BottleCapacity = 4;
     public static int CurrentLevel = 3;
     [SerializeField] private ObjectPoolConfig objectPoolConfig;
     [SerializeField] private LevelHolder levelsCollection;
@@ -15,8 +16,8 @@ public class GameLogic : MonoBehaviour
     private bool pouring = false;
     private BottleController selectedBottle;
 
-    private List<int> colorIndiciesPool = new List<int>();
-   [SerializeField] private List<BottleController> bottleGameCollection;
+    [SerializeField] private List<int> colorIndiciesPool = new List<int>();
+    [SerializeField] private List<BottleController> bottleGameCollection;
 
     private void Start()
     {
@@ -54,14 +55,9 @@ public class GameLogic : MonoBehaviour
         int bottleCount = levelsCollection.LevelCollection[CurrentLevel].BottleCount;
         int colorCount = levelsCollection.LevelCollection[CurrentLevel].colorCount;
         int numberOfEmptyBottles = bottleCount - colorCount;
-        //colorPool = new List<Color>();
-        for (int i = 0; i < 4; i++)
-        {
-            for (int c = 1; c <= colorCount; c++)
-            {
-                colorIndiciesPool.Add(c);
-            }
-        }
+        
+        GenerateColorsForLevel(colorCount);
+
         // Generate bottles
         for (int i = 0; i < bottleCount; i++)
         {
@@ -73,13 +69,30 @@ public class GameLogic : MonoBehaviour
             if (i < levelsCollection.LevelCollection[CurrentLevel].BottleCount - numberOfEmptyBottles)
             {
                 SetColorIndicies(bottle);
-                bottle.GenerateColor(4);
+                bottle.GenerateColor(BottleCapacity);
             } else
             {
                 bottle.GenerateColor(0);
             }
             bottleGameCollection.Add(bottle);
         }
+    }
+
+    public void GenerateColorsForLevel(int colorCount) 
+    {
+        for (int i = 0; i < BottleCapacity; i++)
+        {
+            for (int c = 1; c <= colorCount; c++)
+            {
+                colorIndiciesPool.Add(c);
+            }
+        }
+        Util.Shuffle(colorIndiciesPool);
+    }
+
+    public void ClearColorsLevel() 
+    {
+        colorIndiciesPool.Clear();
     }
 
     public void SetColorIndicies(BottleController bottle)
@@ -193,5 +206,6 @@ public class GameLogic : MonoBehaviour
         */
         return false;
     }
+
 
 }
