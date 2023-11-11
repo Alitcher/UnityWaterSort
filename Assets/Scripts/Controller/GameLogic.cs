@@ -6,7 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class GameLogic : MonoBehaviour
 {
-    public static int CurrentLevel = 1;
+    public static int CurrentLevel = 4;
     [SerializeField] private ObjectPoolConfig objectPoolConfig;
     [SerializeField] private LevelHolder levelsCollection;
     [SerializeField] private BottlePooler pooler;
@@ -15,13 +15,20 @@ public class GameLogic : MonoBehaviour
     private bool pouring = false;
     private BottleController selectedBottle;
 
-    [SerializeField] private List<BottleController> bottleGameCollection;
+    private List<int> colorIndiciesPool = new List<int>();
+   [SerializeField] private List<BottleController> bottleGameCollection;
+
+    private void Start()
+    {
+        DestroyAllBottles(); // destroy all bottles before restart the scene
+        GenerateLevel();
+    }
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            handleBottleMovement();
+            HandleBottleMovement();
         }
 
         if (pouring && selectedBottle.transform.position == selectedBottle.startPosition)
@@ -42,25 +49,46 @@ public class GameLogic : MonoBehaviour
         #endregion
     }
 
-    private void Start()
-    {
-        DestroyAllBottles(); // destroy all bottles before restart the scene
-        GenerateLevel();
-    }
-
     public void GenerateLevel()
     {
-
+        int bottleCount = levelsCollection.LevelCollection[CurrentLevel].BottleCount;
+        int colorCount = levelsCollection.LevelCollection[CurrentLevel].colorCount;
+        int numberOfEmptyBottles = bottleCount - colorCount;
+        //colorPool = new List<Color>();
+        for (int i = 0; i < 4; i++)
+        {
+            for (int c = 1; c <= colorCount; c++)
+            {
+                colorIndiciesPool.Add(c);
+            }
+        }
         // Generate bottles
-        for (int i = 0; i < levelsCollection.LevelCollection[CurrentLevel].BottleCount; i++)
+        for (int i = 0; i < bottleCount; i++)
         {
             // Try to reuse an object from the pool
             BottleController bottle = pooler.objectPool.Get();
             // Set name and position
             bottle.name = "bottle-" + i;
             bottle.transform.position = levelsCollection.LevelCollection[CurrentLevel].BottlePosition[i];
-
+            if (i < levelsCollection.LevelCollection[CurrentLevel].BottleCount - numberOfEmptyBottles)
+            {
+                SetColorIndicies(bottle);
+                bottle.GenerateColor(4);
+            } else
+            {
+                bottle.GenerateColor(0);
+            }
             bottleGameCollection.Add(bottle);
+        }
+    }
+
+    public void SetColorIndicies(BottleController bottle)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            int selectedIndex = Random.Range(0, colorIndiciesPool.Count);
+            bottle.colorIndices[i] = colorIndiciesPool[selectedIndex];
+            colorIndiciesPool.RemoveAt(selectedIndex);
         }
     }
 
@@ -74,11 +102,11 @@ public class GameLogic : MonoBehaviour
         bottleGameCollection.Clear();
     }
 
-    void handleBottleMovement() // initiates pouring animation and selects/unselects bottles based on raycasts
+    void HandleBottleMovement() // initiates pouring animation and selects/unselects bottles based on raycasts
     {
-        RaycastHit hit;
+        //RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit) && !pouring) // check if ray hit a gameobject with a collider
+        if (Physics.Raycast(ray, out RaycastHit hit) && !pouring) // check if ray hit a gameobject with a collider
         {
             if (bottleSelected) // check if a bottle is already selected
             {
@@ -96,8 +124,11 @@ public class GameLogic : MonoBehaviour
             else
             { // select the bottle that the ray hit
                 selectedBottle = hit.collider.gameObject.GetComponent<BottleController>();
-                selectedBottle.SetSelected(true);
-                bottleSelected = true;
+                if (!selectedBottle.CheckEmpty())
+                {
+                    selectedBottle.SetSelected(true);
+                    bottleSelected = true;
+                }
             }
         }
         else if (bottleSelected) // check if a bottle is already slected

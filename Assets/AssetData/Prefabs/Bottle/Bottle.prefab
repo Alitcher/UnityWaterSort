@@ -101,6 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bottleColors: {fileID: 11400000, guid: ee2664daeb8d9704c8b16a20cec14225, type: 2}
   bottleMaskSR: {fileID: 7092480847453248015}
+  startPosition: {x: 0, y: 0, z: 0}
 --- !u!65 &7092480846657496150
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,6 @@ public class BottleController : MonoBehaviour
     private int movingStep = 0;
     private float direction;
     private float targetRotation;
-    private float previousRotation;
 
     public Vector3 startPosition;
     private Vector3 selectedPosition;
@@ -27,7 +27,8 @@ public class BottleController : MonoBehaviour
 
     private ObjectPool<BottleController> _pool;
 
-    private int[] colorIndices = { 0, 0, 0, 0 };
+    [NonSerialized]
+    public int[] colorIndices = { 0, 0, 0, 0 };
     /*
      check ColorSet scriptableObject the number is equivalent to the index of the color. For example:
         0 = empty, // always be on top most of the bottle. shouldn't be the case where the empty color is at the bottom and on top of it is some other colors.
@@ -39,23 +40,26 @@ public class BottleController : MonoBehaviour
 
     private int currentWater; // goes between 0 - 4
 
+    private void Awake()
+    {
+        instanceMaterial = bottleMaskSR.material;
+    }
+
     void Start()
     {
         startPosition = transform.position * 1.0f;
         selectedPosition = new Vector3(startPosition.x, startPosition.y + 10f, startPosition.z);
 
-        instanceMaterial = bottleMaskSR.material;
         //instanceMaterial.SetFloat("_ScaleFactor", 0.5f);
-        bottleMaskSR.enabled = false;
-        bottleMaskSR.enabled = true;
-
-        ChangeColorsOnShader();
+        //bottleMaskSR.enabled = false;
+        //bottleMaskSR.enabled = true;
     }
-    public void GenerateColor()
+    public void GenerateColor(int fillAmount)
     {
         /*
          generate color logic at start
          */
+        currentWater = fillAmount;
         ChangeColorsOnShader();
     }
 
@@ -82,6 +86,11 @@ public class BottleController : MonoBehaviour
     {
         // TODO: UPDATE SHADER TOO
         colorIndices[top] = color;
+    }
+
+    public bool CheckEmpty()
+    {
+        return colorIndices[0] == 0;
     }
 
     bool CheckFull() 
@@ -116,18 +125,15 @@ public class BottleController : MonoBehaviour
             transform.position = goTo(targetPosition, 3.0f);
             if (transform.position == targetPosition)
             {
-                //transform.rotation.eulerAngles.Set(0.0f, 0.0f, (direction == 1.0f ? 360.0f : 0.0f));
                 movingStep = 2;
             }
         }
         if (movingStep == 2 & transform.eulerAngles.z != targetRotation) // rotating to pour
         {
-            //Debug.Log(previousRotation + " : " + transform.eulerAngles.z);
             rotateAround(1.0f);
-            //transform.rotation = rotate(90.0f * direction, 75.0f);
 
-            //Debug.Log(previousRotation + " : " + transform.eulerAngles.z);
             bottleMaskSR.material.SetFloat("_SARM", 0.3f);
+
             bool firstCall = transform.eulerAngles.z == 0.0f;
             if (direction == -1.0f)
             {
@@ -142,16 +148,13 @@ public class BottleController : MonoBehaviour
                     movingStep = 3;
                 }
             }
-            previousRotation = transform.eulerAngles.z;
         }
         if (movingStep == 3 & transform.eulerAngles.z != 0.0f) // rotating to upright position
         {
-            //Debug.Log(previousRotation + " : " + transform.eulerAngles.z);
             rotateAround(-1.0f);
-            //transform.rotation = rotate(90.0f * direction, 75.0f);
 
-            //Debug.Log(previousRotation + " : " + transform.eulerAngles.z);
             bottleMaskSR.material.SetFloat("_SARM", 0.3f);
+
             if (direction == -1.0f)
             {
                 if (transform.eulerAngles.z < 90.0f)
@@ -168,7 +171,6 @@ public class BottleController : MonoBehaviour
                     transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
                 }
             }
-            previousRotation = transform.eulerAngles.z;
         }
         if (movingStep == 4 & transform.position != startPosition) // moving back to original position
         {
@@ -186,12 +188,6 @@ public class BottleController : MonoBehaviour
     {
         return Vector3.MoveTowards(transform.position, targetPosition, movementSpeed);
     }
-
-    //Quaternion rotate(float targetRotation, float rotationSpeed) // increment bottle rotation towards target rotation around z-axis
-    //{
-    //    Quaternion endROtation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, targetRotation);
-    //    return Quaternion.RotateTowards(transform.rotation, endROtation, rotationSpeed * Time.deltaTime);
-    //}
 
     void rotateAround(float back)
     {
@@ -218,7 +214,6 @@ public class BottleController : MonoBehaviour
         direction = transform.position.x - target.x > 0 ? 1.0f : -1.0f;
         targetPosition = target + (transform.right * (direction * (bottleMaskSR.bounds.size.x / 2.0f)) + transform.up * bottleMaskSR.bounds.size.y / 2.0f);
         rotationPivot = target + (transform.up * (bottleMaskSR.bounds.size.y));
-        //targetPosition = target + (transform.right * (direction * 20.0f)) + (transform.up * (bottleMaskSR.bounds.size.y / 2.0f + bottleMaskSR.bounds.size.x / 2f));
         targetRotation = direction < 0 ? 270.0f : 90.0f;
         movingStep = 1;
     }
@@ -228,10 +223,16 @@ public class BottleController : MonoBehaviour
         // TODO: color index should not be fixed. It should randomize within colorset;
         // Make sure that the color set to randomize is not over ColorCount inside the scriptableObject
         //
-        instanceMaterial.SetColor("_C4", bottleColors.colors[4]);
-        instanceMaterial.SetColor("_C3", bottleColors.colors[3]);
-        instanceMaterial.SetColor("_C2", bottleColors.colors[2]);
-        instanceMaterial.SetColor("_C1", bottleColors.colors[1]);
+        if (currentWater == 0)
+        {
+            instanceMaterial.SetFloat("_FillAmount", -15.0f);
+        } else
+        {
+            instanceMaterial.SetColor("_C4", bottleColors.colors[colorIndices[3] - 1]);
+            instanceMaterial.SetColor("_C3", bottleColors.colors[colorIndices[2] - 1]);
+            instanceMaterial.SetColor("_C2", bottleColors.colors[colorIndices[1] - 1]);
+            instanceMaterial.SetColor("_C1", bottleColors.colors[colorIndices[0] - 1]);
+        }
     }
 
     public void SetPool(ObjectPool<BottleController> pool)
