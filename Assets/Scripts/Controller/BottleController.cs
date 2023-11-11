@@ -234,7 +234,7 @@ public class BottleController : MonoBehaviour
         {
             for (int i = 0; i < currentWater; i++)
             {
-                instanceMaterial.SetColor("_C" + (i + 1), bottleColors.colors[colorIndices[i] - 1]);
+                instanceMaterial.SetColor("_C" + (i + 1), bottleColors.colors[colorIndices[i]]);
             }
         }
     }
