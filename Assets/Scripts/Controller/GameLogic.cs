@@ -6,7 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class GameLogic : MonoBehaviour
 {
-    public static int CurrentLevel = 4;
+    public static int CurrentLevel = 3;
     [SerializeField] private ObjectPoolConfig objectPoolConfig;
     [SerializeField] private LevelHolder levelsCollection;
     [SerializeField] private BottlePooler pooler;
@@ -117,7 +117,7 @@ public class GameLogic : MonoBehaviour
                 }
                 else
                 { // initiate pouring animation from selected bottle to the bottle hit by ray
-                    selectedBottle.PourTo(hit.collider.gameObject.transform.position);
+                    selectedBottle.PourTo(hit.collider.gameObject.transform.position, 4);
                     pouring = true;
                 }
             }

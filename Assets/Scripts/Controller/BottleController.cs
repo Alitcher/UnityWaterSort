@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UIElements;
@@ -18,6 +19,8 @@ public class BottleController : MonoBehaviour
     private int movingStep = 0;
     private float direction;
     private float targetRotation;
+    private float currentWaterScale = 1.0f;
+    private float rotationTime = 90.0f;
 
     public Vector3 startPosition;
     private Vector3 selectedPosition;
@@ -132,7 +135,7 @@ public class BottleController : MonoBehaviour
         {
             rotateAround(1.0f);
 
-            bottleMaskSR.material.SetFloat("_SARM", 0.3f);
+            //change currentWaterScale here
 
             bool firstCall = transform.eulerAngles.z == 0.0f;
             if (direction == -1.0f)
@@ -141,7 +144,8 @@ public class BottleController : MonoBehaviour
                 {
                     movingStep = 3;
                 }
-            } else
+            } 
+            else
             {
                 if (transform.eulerAngles.z > targetRotation && !firstCall)
                 {
@@ -153,7 +157,7 @@ public class BottleController : MonoBehaviour
         {
             rotateAround(-1.0f);
 
-            bottleMaskSR.material.SetFloat("_SARM", 0.3f);
+            //change currentWaterScale here
 
             if (direction == -1.0f)
             {
@@ -175,13 +179,13 @@ public class BottleController : MonoBehaviour
         if (movingStep == 4 & transform.position != startPosition) // moving back to original position
         {
             transform.position = goTo(startPosition, 3.0f);
-            bottleMaskSR.material.SetFloat("_SARM", 1.0f);
             if (transform.position == startPosition)
             {
                 movingStep = 0;
                 SetSelected(false);
             }
         }
+        bottleMaskSR.material.SetFloat("_SARM", currentWaterScale);
     }
 
     Vector3 goTo(Vector3 targetPosition, float movementSpeed) // increment bottle position towards target position
@@ -191,7 +195,7 @@ public class BottleController : MonoBehaviour
 
     void rotateAround(float back)
     {
-        transform.RotateAround(rotationPivot, Vector3.forward, back * direction * 90 * Time.deltaTime);
+        transform.RotateAround(rotationPivot, Vector3.forward, back * direction * 90.09f * Time.deltaTime);
     }
 
     public void SetSelected(bool selected) // set this bottle as seleced or not selected and change spriterenderers orders in layers
@@ -209,12 +213,12 @@ public class BottleController : MonoBehaviour
         this.selected = selected;
     }
 
-    public void PourTo(Vector3 target) // initiate pouring animation
+    public void PourTo(Vector3 target, int amount) // initiate pouring animation
     {
         direction = transform.position.x - target.x > 0 ? 1.0f : -1.0f;
         targetPosition = target + (transform.right * (direction * (bottleMaskSR.bounds.size.x / 2.0f)) + transform.up * bottleMaskSR.bounds.size.y / 2.0f);
         rotationPivot = target + (transform.up * (bottleMaskSR.bounds.size.y));
-        targetRotation = direction < 0 ? 270.0f : 90.0f;
+        targetRotation = (direction < 0 ? (360.0f - 90.0f) : 90.0f);
         movingStep = 1;
     }
 
@@ -228,10 +232,10 @@ public class BottleController : MonoBehaviour
             instanceMaterial.SetFloat("_FillAmount", -15.0f);
         } else
         {
-            instanceMaterial.SetColor("_C4", bottleColors.colors[colorIndices[3] - 1]);
-            instanceMaterial.SetColor("_C3", bottleColors.colors[colorIndices[2] - 1]);
-            instanceMaterial.SetColor("_C2", bottleColors.colors[colorIndices[1] - 1]);
-            instanceMaterial.SetColor("_C1", bottleColors.colors[colorIndices[0] - 1]);
+            for (int i = 0; i < currentWater; i++)
+            {
+                instanceMaterial.SetColor("_C" + (i + 1), bottleColors.colors[colorIndices[i] - 1]);
+            }
         }
     }
 
