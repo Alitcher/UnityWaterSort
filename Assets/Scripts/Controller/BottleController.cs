@@ -16,18 +16,27 @@ public class BottleController : MonoBehaviour
     private Material instanceMaterial;
 
     private bool selected = false;
+    private bool rotationStarted = false;
     private int movingStep = 0;
     private float direction;
     private float targetRotation;
-    private float currentWaterScale = 1.0f;
-    private float rotationTime = 90.0f;
+    private float rotationSpeed = 120.0f;
+    private float rotationStart;
+    private float rotationEnd;
+    private float fillAmount;
+    private float fillDelta;
 
     public Vector3 startPosition;
     private Vector3 selectedPosition;
     private Vector3 targetPosition;
     private Vector3 rotationPivot;
 
+    public GameObject[] waterPivots = new GameObject[4];
+
     private ObjectPool<BottleController> _pool;
+
+    private int currentWater; // goes between 0 - 4
+    private int layersToPour = 1;
 
     [SerializeField] private int[] colorIndices = { 0, 0, 0, 0 };
     /*
@@ -39,12 +48,10 @@ public class BottleController : MonoBehaviour
      ColorSet
      */
 
-    private int currentWater; // goes between 0 - 4
-    private int layersToPour = 1;
-
     private void Awake()
     {
         instanceMaterial = bottleMaskSR.material;
+        fillAmount = instanceMaterial.GetFloat("_FillAmount");
     }
 
     void Start()
@@ -52,6 +59,7 @@ public class BottleController : MonoBehaviour
         startPosition = transform.position * 1.0f;
         selectedPosition = new Vector3(startPosition.x, startPosition.y + 10f, startPosition.z);
     }
+
     public void GenerateColor(int fillAmount)
     {
         /*
@@ -61,14 +69,14 @@ public class BottleController : MonoBehaviour
         ChangeColorsOnShader();
     }
 
-    public void SetFillIn()
+    public void SetFillIn(float amount)
     {
         /*
          currentWater++;
          update color
         ***UPDATE SHADER TOO***
          */
-        instanceMaterial.SetFloat("_FillAmount", -15.0f);
+        instanceMaterial.SetFloat("_FillAmount", amount);
     }
 
     public void SetPourOut()
@@ -100,12 +108,6 @@ public class BottleController : MonoBehaviour
 
     void Update()
     {
-        /*
-         * Henrik
-         TODO: Play with bottleMaskSR.material.SetFloat("_SARM", <adjust value here>); to smooth out water scailing during the rotation
-         The rotation scale, aka _SARM inside shader graph, must be 0.3 when the bottle is at 90 degrees,
-                                                        and must be 1.0 when the bottle is at 0 degree(original position).       
-         */
         if (selected & transform.position != selectedPosition & movingStep == 0) // moving up when selected
         {
             transform.position = goTo(selectedPosition, 1.0f);
@@ -123,61 +125,29 @@ public class BottleController : MonoBehaviour
                 movingStep = 2;
             }
         }
-        if (movingStep == 2 & transform.eulerAngles.z != targetRotation) // rotating to pour
+        if (movingStep == 2) // rotating to pour
         {
-            rotateAround(1.0f);
-
-            //change currentWaterScale here
-
-            bool firstCall = transform.eulerAngles.z == 0.0f;
-            if (direction == -1.0f)
-            {
-                if (transform.eulerAngles.z < targetRotation && !firstCall)
-                {
-                    movingStep = 3;
-                }
-            } 
-            else
-            {
-                if (transform.eulerAngles.z > targetRotation && !firstCall)
-                {
-                    movingStep = 3;
-                }
-            }
+            RotateToPour();
         }
-        if (movingStep == 3 & transform.eulerAngles.z != 0.0f) // rotating to upright position
+        if (movingStep == 3) // rotating to upright position
         {
-            rotateAround(-1.0f);
-
-            //change currentWaterScale here
-
-            if (direction == -1.0f)
-            {
-                if (transform.eulerAngles.z < 90.0f)
-                {
-                    movingStep = 4;
-                    transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                }
-            }
-            else
-            {
-                if (transform.eulerAngles.z > 270.0f)
-                {
-                    movingStep = 4;
-                    transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                }
-            }
+            RotateBack();
         }
         if (movingStep == 4 & transform.position != startPosition) // moving back to original position
         {
             transform.position = goTo(startPosition, 3.0f);
             if (transform.position == startPosition)
             {
+                instanceMaterial.SetFloat("_SARM", 1.0f);
                 movingStep = 0;
                 SetSelected(false);
             }
         }
-        bottleMaskSR.material.SetFloat("_SARM", currentWaterScale);
+
+        if (movingStep != 0)
+        {
+            instanceMaterial.SetFloat("_SARM", 1.0f - (0.7f * (direction == -1.0f ? (360.0f - transform.eulerAngles.z) / 90.0f : transform.eulerAngles.z / 90.0f)));
+        }
     }
 
     Vector3 goTo(Vector3 targetPosition, float movementSpeed) // increment bottle position towards target position
@@ -185,9 +155,57 @@ public class BottleController : MonoBehaviour
         return Vector3.MoveTowards(transform.position, targetPosition, movementSpeed);
     }
 
-    void rotateAround(float back)
+    void RotateToPour()
     {
-        transform.RotateAround(rotationPivot, Vector3.forward, back * direction * 90.09f * Time.deltaTime);
+        transform.RotateAround(rotationPivot, Vector3.forward, direction * rotationSpeed * Time.deltaTime); //rotate around above other bottle center point
+
+        rotationStart = waterPivots[currentWater - 1].transform.position.y;
+        rotationEnd = currentWater - layersToPour == 0 ? waterPivots[1].transform.position.y - (bottleMaskSR.bounds.size.y / 2.0f) : waterPivots[currentWater - layersToPour - 1].transform.position.y;
+
+        float fillChange = fillAmount - (layersToPour * 6.25f * Math.Clamp((fillDelta - (rotationPivot.y - rotationEnd)) / fillDelta, 0.0f, 1.0f));
+        instanceMaterial.SetFloat("_FillAmount", fillChange);
+
+        if (rotationStart > rotationPivot.y && !rotationStarted)
+        {
+            rotationStarted = true;
+
+            fillDelta = rotationPivot.y - rotationEnd;
+
+            rotationSpeed = 30.0f;
+        }
+        if (rotationEnd > rotationPivot.y)
+        {
+            rotationStarted = false;
+
+            fillAmount = fillAmount - layersToPour * 6.25f;
+            instanceMaterial.SetFloat("_FillAmount", fillAmount);
+
+            rotationSpeed = 120.0f;
+
+            movingStep = 3;
+        }
+    }
+
+    void RotateBack()
+    {
+        transform.RotateAround(rotationPivot, Vector3.forward, -1.0f * direction * rotationSpeed * Time.deltaTime);
+
+        if (direction == -1.0f)
+        {
+            if (transform.eulerAngles.z < 90.0f)
+            {
+                movingStep = 4;
+                transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+            }
+        }
+        else
+        {
+            if (transform.eulerAngles.z > 270.0f)
+            {
+                movingStep = 4;
+                transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+            }
+        }
     }
 
     public void SetSelected(bool selected) // set this bottle as seleced or not selected and change spriterenderers orders in layers
@@ -205,11 +223,12 @@ public class BottleController : MonoBehaviour
         this.selected = selected;
     }
 
-    public void PourTo(Vector3 target, int amount) // initiate pouring animation
+    public void PourTo(Vector3 target, int layersToPour) // initiate pouring animation
     {
         direction = transform.position.x - target.x > 0 ? 1.0f : -1.0f;
         targetPosition = target + (transform.right * (direction * (bottleMaskSR.bounds.size.x / 2.0f)) + transform.up * bottleMaskSR.bounds.size.y / 2.0f);
         rotationPivot = target + (transform.up * (bottleMaskSR.bounds.size.y));
+        this.layersToPour = layersToPour;
         targetRotation = (direction < 0 ? (360.0f - 90.0f) : 90.0f);
         movingStep = 1;
     }

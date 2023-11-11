@@ -136,7 +136,7 @@ public class GameLogic : MonoBehaviour
                     {
                         return;
                     }
-                    selectedBottle.PourTo(secondSelectedBottle.gameObject.transform.position, 4);
+                    selectedBottle.PourTo(secondSelectedBottle.gameObject.transform.position, 1);
                     pouring = true;
                 }
             }
