@@ -27,11 +27,9 @@ public class BottleController : MonoBehaviour
     private Vector3 targetPosition;
     private Vector3 rotationPivot;
 
-
     private ObjectPool<BottleController> _pool;
 
-    [NonSerialized]
-    public int[] colorIndices = { 0, 0, 0, 0 };
+    [SerializeField] private int[] colorIndices = { 0, 0, 0, 0 };
     /*
      check ColorSet scriptableObject the number is equivalent to the index of the color. For example:
         0 = empty, // always be on top most of the bottle. shouldn't be the case where the empty color is at the bottom and on top of it is some other colors.
@@ -42,6 +40,7 @@ public class BottleController : MonoBehaviour
      */
 
     private int currentWater; // goes between 0 - 4
+    private int layersToPour = 1;
 
     private void Awake()
     {
@@ -52,10 +51,6 @@ public class BottleController : MonoBehaviour
     {
         startPosition = transform.position * 1.0f;
         selectedPosition = new Vector3(startPosition.x, startPosition.y + 10f, startPosition.z);
-
-        //instanceMaterial.SetFloat("_ScaleFactor", 0.5f);
-        //bottleMaskSR.enabled = false;
-        //bottleMaskSR.enabled = true;
     }
     public void GenerateColor(int fillAmount)
     {
@@ -73,6 +68,7 @@ public class BottleController : MonoBehaviour
          update color
         ***UPDATE SHADER TOO***
          */
+        instanceMaterial.SetFloat("_FillAmount", -15.0f);
     }
 
     public void SetPourOut()
@@ -83,6 +79,7 @@ public class BottleController : MonoBehaviour
 
         ***UPDATE SHADER TOO***
          */
+        instanceMaterial.SetFloat("_FillAmount", -15.0f);
     }
 
     void UpdateColor(int top, int color) 
@@ -96,14 +93,9 @@ public class BottleController : MonoBehaviour
         return colorIndices[0] == 0;
     }
 
-    bool CheckFull() 
+    public bool CheckFull() 
     {
-        for (int i = 0; i < colorIndices.Length; i++)
-        {
-            if(i == 0)
-                return false;
-        }
-        return true;
+        return colorIndices[colorIndices.Length - 1] != 0;
     }
 
     void Update()
@@ -239,11 +231,25 @@ public class BottleController : MonoBehaviour
         }
     }
 
+    public void SetColorAt(int index, int color) 
+    {
+        colorIndices[index] = color;
+    }
+
     public void SetPool(ObjectPool<BottleController> pool)
     {
         _pool = pool;
     }
 
-
+    private int GetTopColor()
+    {
+        // Find the topmost color that isn't zero and return it.
+        for (int i = colorIndices.Length - 1; i >= 0; i--)
+        {
+            if (colorIndices[i] != 0)
+                return colorIndices[i];
+        }
+        return 0; // If no color is found, return 0.
+    }
 
 }

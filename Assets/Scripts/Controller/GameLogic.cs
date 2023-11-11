@@ -6,6 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class GameLogic : MonoBehaviour
 {
+    public const int BottleCapacity = 4;
     public static int CurrentLevel = 3;
     [SerializeField] private ObjectPoolConfig objectPoolConfig;
     [SerializeField] private LevelHolder levelsCollection;
@@ -15,8 +16,8 @@ public class GameLogic : MonoBehaviour
     private bool pouring = false;
     private BottleController selectedBottle;
 
-    private List<int> colorIndiciesPool = new List<int>();
-   [SerializeField] private List<BottleController> bottleGameCollection;
+    [SerializeField] private List<int> colorIndiciesPool = new List<int>();
+    [SerializeField] private List<BottleController> bottleGameCollection;
 
     private void Start()
     {
@@ -54,14 +55,9 @@ public class GameLogic : MonoBehaviour
         int bottleCount = levelsCollection.LevelCollection[CurrentLevel].BottleCount;
         int colorCount = levelsCollection.LevelCollection[CurrentLevel].colorCount;
         int numberOfEmptyBottles = bottleCount - colorCount;
-        //colorPool = new List<Color>();
-        for (int i = 0; i < 4; i++)
-        {
-            for (int c = 1; c <= colorCount; c++)
-            {
-                colorIndiciesPool.Add(c);
-            }
-        }
+        
+        GenerateColorsForLevel(colorCount);
+
         // Generate bottles
         for (int i = 0; i < bottleCount; i++)
         {
@@ -73,7 +69,7 @@ public class GameLogic : MonoBehaviour
             if (i < levelsCollection.LevelCollection[CurrentLevel].BottleCount - numberOfEmptyBottles)
             {
                 SetColorIndicies(bottle);
-                bottle.GenerateColor(4);
+                bottle.GenerateColor(BottleCapacity);
             } else
             {
                 bottle.GenerateColor(0);
@@ -82,12 +78,29 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    public void GenerateColorsForLevel(int colorCount) 
+    {
+        for (int i = 0; i < BottleCapacity; i++)
+        {
+            for (int c = 1; c <= colorCount; c++)
+            {
+                colorIndiciesPool.Add(c);
+            }
+        }
+        //Util.Shuffle(colorIndiciesPool);
+    }
+
+    public void ClearColorsLevel() 
+    {
+        colorIndiciesPool.Clear();
+    }
+
     public void SetColorIndicies(BottleController bottle)
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < BottleCapacity; i++)
         {
             int selectedIndex = Random.Range(0, colorIndiciesPool.Count);
-            bottle.colorIndices[i] = colorIndiciesPool[selectedIndex];
+            bottle.SetColorAt(i, colorIndiciesPool[selectedIndex]);
             colorIndiciesPool.RemoveAt(selectedIndex);
         }
     }
@@ -115,9 +128,15 @@ public class GameLogic : MonoBehaviour
                     selectedBottle.SetSelected(false);
                     bottleSelected = false;
                 }
-                else
+                else // Pour
                 { // initiate pouring animation from selected bottle to the bottle hit by ray
-                    selectedBottle.PourTo(hit.collider.gameObject.transform.position, 4);
+                    BottleController secondSelectedBottle = hit.collider.gameObject.GetComponent<BottleController>();
+
+                    if (secondSelectedBottle.CheckFull())
+                    {
+                        return;
+                    }
+                    selectedBottle.PourTo(secondSelectedBottle.gameObject.transform.position, 4);
                     pouring = true;
                 }
             }
@@ -193,5 +212,6 @@ public class GameLogic : MonoBehaviour
         */
         return false;
     }
+
 
 }
