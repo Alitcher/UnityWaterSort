@@ -87,7 +87,7 @@ public class GameLogic : MonoBehaviour
                 colorIndiciesPool.Add(c);
             }
         }
-        Util.Shuffle(colorIndiciesPool);
+        //Util.Shuffle(colorIndiciesPool);
     }
 
     public void ClearColorsLevel() 
@@ -97,10 +97,10 @@ public class GameLogic : MonoBehaviour
 
     public void SetColorIndicies(BottleController bottle)
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < BottleCapacity; i++)
         {
             int selectedIndex = Random.Range(0, colorIndiciesPool.Count);
-            bottle.colorIndices[i] = colorIndiciesPool[selectedIndex];
+            bottle.SetColorAt(i, colorIndiciesPool[selectedIndex]);
             colorIndiciesPool.RemoveAt(selectedIndex);
         }
     }
@@ -128,9 +128,15 @@ public class GameLogic : MonoBehaviour
                     selectedBottle.SetSelected(false);
                     bottleSelected = false;
                 }
-                else
+                else // Pour
                 { // initiate pouring animation from selected bottle to the bottle hit by ray
-                    selectedBottle.PourTo(hit.collider.gameObject.transform.position, 4);
+                    BottleController secondSelectedBottle = hit.collider.gameObject.GetComponent<BottleController>();
+
+                    if (secondSelectedBottle.CheckFull())
+                    {
+                        return;
+                    }
+                    selectedBottle.PourTo(secondSelectedBottle.gameObject.transform.position, 4);
                     pouring = true;
                 }
             }
