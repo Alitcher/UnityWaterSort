@@ -17,10 +17,12 @@ public class BottleController : MonoBehaviour
     private int movingStep = 0;
     private float direction;
     private float targetRotation;
+    private float previousRotation;
 
-    private Vector3 startPosition;
+    public Vector3 startPosition;
     private Vector3 selectedPosition;
     private Vector3 targetPosition;
+    private Vector3 rotationPivot;
 
 
     private ObjectPool<BottleController> _pool;
@@ -114,26 +116,59 @@ public class BottleController : MonoBehaviour
             transform.position = goTo(targetPosition, 3.0f);
             if (transform.position == targetPosition)
             {
+                //transform.rotation.eulerAngles.Set(0.0f, 0.0f, (direction == 1.0f ? 360.0f : 0.0f));
                 movingStep = 2;
             }
         }
         if (movingStep == 2 & transform.eulerAngles.z != targetRotation) // rotating to pour
         {
-            transform.rotation = rotate(90.0f * direction, 75.0f);
+            //Debug.Log(previousRotation + " : " + transform.eulerAngles.z);
+            rotateAround(1.0f);
+            //transform.rotation = rotate(90.0f * direction, 75.0f);
 
+            //Debug.Log(previousRotation + " : " + transform.eulerAngles.z);
             bottleMaskSR.material.SetFloat("_SARM", 0.3f);
-            if (transform.eulerAngles.z == targetRotation)
+            bool firstCall = transform.eulerAngles.z == 0.0f;
+            if (direction == -1.0f)
             {
-                movingStep = 3;
+                if (transform.eulerAngles.z < targetRotation && !firstCall)
+                {
+                    movingStep = 3;
+                }
+            } else
+            {
+                if (transform.eulerAngles.z > targetRotation && !firstCall)
+                {
+                    movingStep = 3;
+                }
             }
+            previousRotation = transform.eulerAngles.z;
         }
         if (movingStep == 3 & transform.eulerAngles.z != 0.0f) // rotating to upright position
         {
-            transform.rotation = rotate(0.0f, 75.0f);
-            if (transform.eulerAngles.z == 0.0f)
+            //Debug.Log(previousRotation + " : " + transform.eulerAngles.z);
+            rotateAround(-1.0f);
+            //transform.rotation = rotate(90.0f * direction, 75.0f);
+
+            //Debug.Log(previousRotation + " : " + transform.eulerAngles.z);
+            bottleMaskSR.material.SetFloat("_SARM", 0.3f);
+            if (direction == -1.0f)
             {
-                movingStep = 4;
+                if (transform.eulerAngles.z < 90.0f)
+                {
+                    movingStep = 4;
+                    transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                }
             }
+            else
+            {
+                if (transform.eulerAngles.z > 270.0f)
+                {
+                    movingStep = 4;
+                    transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                }
+            }
+            previousRotation = transform.eulerAngles.z;
         }
         if (movingStep == 4 & transform.position != startPosition) // moving back to original position
         {
@@ -152,10 +187,15 @@ public class BottleController : MonoBehaviour
         return Vector3.MoveTowards(transform.position, targetPosition, movementSpeed);
     }
 
-    Quaternion rotate(float targetRotation, float rotationSpeed) // increment bottle rotation towards target rotation around z-axis
+    //Quaternion rotate(float targetRotation, float rotationSpeed) // increment bottle rotation towards target rotation around z-axis
+    //{
+    //    Quaternion endROtation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, targetRotation);
+    //    return Quaternion.RotateTowards(transform.rotation, endROtation, rotationSpeed * Time.deltaTime);
+    //}
+
+    void rotateAround(float back)
     {
-        Quaternion endROtation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, targetRotation);
-        return Quaternion.RotateTowards(transform.rotation, endROtation, rotationSpeed * Time.deltaTime);
+        transform.RotateAround(rotationPivot, Vector3.forward, back * direction * 90 * Time.deltaTime);
     }
 
     public void SetSelected(bool selected) // set this bottle as seleced or not selected and change spriterenderers orders in layers
@@ -176,7 +216,9 @@ public class BottleController : MonoBehaviour
     public void PourTo(Vector3 target) // initiate pouring animation
     {
         direction = transform.position.x - target.x > 0 ? 1.0f : -1.0f;
-        targetPosition = target + (transform.right * (direction * 20.0f)) + (transform.up * (bottleMaskSR.bounds.size.y / 2.0f + bottleMaskSR.bounds.size.x * 1.0f / 2f));
+        targetPosition = target + (transform.right * (direction * (bottleMaskSR.bounds.size.x / 2.0f)) + transform.up * bottleMaskSR.bounds.size.y / 2.0f);
+        rotationPivot = target + (transform.up * (bottleMaskSR.bounds.size.y));
+        //targetPosition = target + (transform.right * (direction * 20.0f)) + (transform.up * (bottleMaskSR.bounds.size.y / 2.0f + bottleMaskSR.bounds.size.x / 2f));
         targetRotation = direction < 0 ? 270.0f : 90.0f;
         movingStep = 1;
     }

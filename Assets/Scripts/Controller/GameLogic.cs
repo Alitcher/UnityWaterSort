@@ -12,6 +12,7 @@ public class GameLogic : MonoBehaviour
     [SerializeField] private BottlePooler pooler;
 
     private bool bottleSelected = false;
+    private bool pouring = false;
     private BottleController selectedBottle;
 
     [SerializeField] private List<BottleController> bottleGameCollection;
@@ -21,6 +22,12 @@ public class GameLogic : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             handleBottleMovement();
+        }
+
+        if (pouring && selectedBottle.transform.position == selectedBottle.startPosition)
+        {
+            bottleSelected = false;
+            pouring = false;
         }
 
         #region Debug Control
@@ -71,7 +78,7 @@ public class GameLogic : MonoBehaviour
     {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit)) // check if ray hit a gameobject with a collider
+        if (Physics.Raycast(ray, out hit) && !pouring) // check if ray hit a gameobject with a collider
         {
             if (bottleSelected) // check if a bottle is already selected
             {
@@ -83,7 +90,7 @@ public class GameLogic : MonoBehaviour
                 else
                 { // initiate pouring animation from selected bottle to the bottle hit by ray
                     selectedBottle.PourTo(hit.collider.gameObject.transform.position);
-                    bottleSelected = false;
+                    pouring = true;
                 }
             }
             else
