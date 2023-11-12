@@ -145,7 +145,7 @@ public class GameLogic : MonoBehaviour
                     }
                     pouring = true;
 
-                    selectedBottle.PourTo(secondSelectedBottle.gameObject.transform.position, 3);
+                    selectedBottle.PourTo(secondSelectedBottle.gameObject.transform.position, layersToPour);
                     secondSelectedBottle.SetFillIn(selectedBottle.GetTopColor(), layersToPour);
                     selectedBottle.SetPourOut(layersToPour);
 
