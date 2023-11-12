@@ -4,10 +4,10 @@ using UnityEngine.EventSystems;
 public class UIInteractable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // Cursors
-    public Texture2D CursorPointer;
-    public Vector2 CursorPointerHotspot = new Vector2(25, 20);
-    public Texture2D CursorDefault;
-    public Vector2 CursorDefaultHotspot = Vector2.zero;
+    [SerializeField] private Texture2D CursorPointer;
+    [SerializeField] private Vector2 CursorPointerHotspot = new Vector2(25, 20);
+    [SerializeField] private Texture2D CursorDefault;
+    [SerializeField] private Vector2 CursorDefaultHotspot = Vector2.zero;
 
     public void OnPointerEnter(PointerEventData data)
     {
