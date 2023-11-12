@@ -39,17 +39,9 @@ public class BottleController : MonoBehaviour
     private int currentWater; // goes between 0 - 4
     private int layersToPour = 1;
 
-    [SerializeField] private int[] colorIndices = { 0, 0, 0, 0 };
+    [SerializeField] private int[] colorIndices = { 0, 0, 0, 0 }; //check ColorSet scriptableObject the number is equivalent to the index of the color.
 
     private float layerHeight = 6.25f;
-    /*
-     check ColorSet scriptableObject the number is equivalent to the index of the color. For example:
-        0 = empty, // always be on top most of the bottle. shouldn't be the case where the empty color is at the bottom and on top of it is some other colors.
-        1 = red,
-        ...
-        6 = purple
-     ColorSet
-     */
 
     public int GetCurrentWater => currentWater;
 
@@ -122,7 +114,10 @@ public class BottleController : MonoBehaviour
 
         UpdateShaderLayers(newFillAmount);
 
-
+        if (CheckBottleComplete()) 
+        {
+            print(this.name + " complete!");
+        }
     }
 
     public void SetPourOut(int layerCount)
@@ -227,7 +222,7 @@ public class BottleController : MonoBehaviour
         transform.RotateAround(rotationPivot, Vector3.forward, direction * rotationSpeed * Time.deltaTime); //rotate around above other bottle center point
 
         rotationStart = waterPivots[currentWater - 1];
-        rotationEnd = currentWater - layersToPour == 0 ? waterPivots[1] - (bottleMaskSR.bounds.size.y / 2.0f) : waterPivots[currentWater - layersToPour - 1];
+        rotationEnd = (currentWater - layersToPour == 0) ? waterPivots[1] - (bottleMaskSR.bounds.size.y / 2.0f) : waterPivots[0];
 
         float fillChange = fillAmount - (layersToPour * layerHeight * Math.Clamp((fillDelta - (rotationPivot.y - rotationEnd)) / fillDelta, 0.0f, 1.0f));
         instanceMaterial.SetFloat("_FillAmount", fillChange);
@@ -302,7 +297,21 @@ public class BottleController : MonoBehaviour
 
 
 
+    public bool CheckBottleComplete() 
+    {
+        int emptyColor = 0;
+        int colorToCheck = colorIndices[0];
 
+        for (int i = 1; i < colorIndices.Length; i++)
+        {
+            if (colorIndices[i] == emptyColor || colorIndices[i] != colorToCheck)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     public void SetColorAt(int index, int color)
     {

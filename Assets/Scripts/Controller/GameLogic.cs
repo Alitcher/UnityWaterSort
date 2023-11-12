@@ -20,6 +20,10 @@ public class GameLogic : MonoBehaviour
     [SerializeField] private List<int> colorIndiciesPool = new List<int>();
     [SerializeField] private List<BottleController> bottleGameCollection;
 
+
+    #region Reset these value when reset the game
+    private int bottleCompleteCount = 0;
+    #endregion
     private void Start()
     {
         DestroyAllBottles(); // destroy all bottles before restart the scene
@@ -143,11 +147,18 @@ public class GameLogic : MonoBehaviour
                     {
                         return;
                     }
+
                     pouring = true;
 
                     selectedBottle.PourTo(secondSelectedBottle.gameObject.transform.position, layersToPour);
                     secondSelectedBottle.SetFillIn(selectedBottle.GetTopColor(), layersToPour);
                     selectedBottle.SetPourOut(layersToPour);
+
+                    if (secondSelectedBottle.CheckBottleComplete()) 
+                    {
+                        print(secondSelectedBottle.name + " completed!");
+                        bottleCompleteCount++;
+                    }
 
                 }
             }
@@ -174,24 +185,16 @@ public class GameLogic : MonoBehaviour
     {
         return (selectedBottle.GetTopColor() == secondSelectedBottle.GetTopColor() &&
                layersToPour + secondSelectedBottle.GetCurrentWater <= BottleCapacity) ||
-               secondSelectedBottle.CheckEmpty();
+               secondSelectedBottle.CheckEmpty() || !selectedBottle.CheckBottleComplete();
     }
 
     bool CheckGameFinished()
     {
-        /*
-         TODO: Checks if the game is finished or not.
-        1. Iterate at each bottle on the game board one by one.
-
-        2. For each bottle, check if the color of the first ball (at the top of the bottle) is not 0 (which means there is a color).
-            2.1. If the color is 0 (no color), it skips that bottle and goes to check the next one.
-            2.2. If the color is not 0, it then checks all the colors and indices in that bottle.
-
-        3. For each color index inside a bottle, If any indices in the bottle is not 0 and is not the same as the first index's color, 
-           it means the bottle has mixed colors, and the game is not over, so it returns False.
-        4. After checking all bottles, if no bottle has mixed colors, and each bottle has a single color or is empty, 
-           it means the game is done, and it returns True.
-         */
+        if (bottleCompleteCount == levelsCollection.LevelCollection[CurrentLevel].colorCount) 
+        {
+            print("Game Clear!!");
+            return true;
+        }
         return false;
     }
 
