@@ -51,6 +51,10 @@ public class GameLogic : MonoBehaviour
         {
             GenerateLevel();
         }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene("Game");
+        }
         #endregion
     }
 
