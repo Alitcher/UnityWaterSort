@@ -26,7 +26,9 @@ public class BottleController : MonoBehaviour
     private Vector3 targetPosition;
     private Vector3 rotationPivot;
 
-    public float[] waterPivots = new float[4];
+    public GameObject[] waterPivots = new GameObject[4];
+
+    private BottleController PourToBottle; 
 
     private ObjectPool<BottleController> _pool;
 
@@ -81,18 +83,17 @@ public class BottleController : MonoBehaviour
     {
         startPosition = transform.position * 1.0f;
         selectedPosition = new Vector3(startPosition.x, startPosition.y + 10f, startPosition.z);
-
-        for (int i = 0; i < waterPivots.Length; i++)
-        {
-            waterPivots[i] = -8.75f + i * layerHeight;
-
-        }
     }
 
-    public void GenerateColor(int fillAmount)
+    public void GenerateColor(int layers)
     {
-        currentWater = fillAmount;
-        ResetShaderLayers();
+        currentWater = layers;
+
+        //ResetShaderLayers();
+        instanceMaterial.SetFloat("_FillAmount", currentWater == 0 ? -15.0f : 10.0f); // replacement for resetShaderLayersFunction
+        UpdateShaderLayers();
+
+        fillAmount = instanceMaterial.GetFloat("_FillAmount");
     }
 
     public void SetFillIn(int fillColor, int layerCount)
@@ -103,12 +104,7 @@ public class BottleController : MonoBehaviour
         }
         currentWater += layerCount;
 
-        float additionalFillAmount = layerCount * layerHeight;
-        float newFillAmount = instanceMaterial.GetFloat("_FillAmount") + additionalFillAmount;
-
-        UpdateShaderLayers(newFillAmount);
-
-        if (CheckBottleComplete()) 
+        if (CheckBottleComplete())
         {
             print(this.name + " complete!");
         }
@@ -121,31 +117,10 @@ public class BottleController : MonoBehaviour
             colorIndices[currentWater - i] = 0;
         }
         currentWater -= layerCount;
-
-        float additionalFillAmount = layerCount * layerHeight;
-        float newFillAmount = instanceMaterial.GetFloat("_FillAmount") - additionalFillAmount;
-
-        UpdateShaderLayers(newFillAmount);
-
     }
 
-    void ResetShaderLayers()
+    public void UpdateShaderLayers()
     {
-        if (currentWater == 0)
-        {
-            UpdateShaderLayers(-15.0f);
-            return;
-        }
-
-
-        UpdateShaderLayers(10.0f);
-
-    }
-
-    private void UpdateShaderLayers(float newFillAmount)
-    {
-        instanceMaterial.SetFloat("_FillAmount", newFillAmount);
-
         for (int i = 0; i < GameLogic.BottleCapacity; i++)
         {
             instanceMaterial.SetColor("_C" + (i + 1), bottleColors.colors[colorIndices[i]]);
@@ -183,7 +158,7 @@ public class BottleController : MonoBehaviour
         }
         if (movingStep == 2) // rotating to pour
         {
-            RotateToPour();
+            RotateToPour(PourToBottle);
         }
         if (movingStep == 3) // rotating to upright position
         {
@@ -200,7 +175,7 @@ public class BottleController : MonoBehaviour
             }
         }
 
-        if (movingStep != 0)
+        if (movingStep == 2 || movingStep == 3)
         {
             instanceMaterial.SetFloat("_SARM", 1.0f - (0.7f * (direction == -1.0f ? (360.0f - transform.eulerAngles.z) / 90.0f : transform.eulerAngles.z / 90.0f)));
         }
@@ -211,33 +186,38 @@ public class BottleController : MonoBehaviour
         return Vector3.MoveTowards(transform.position, targetPosition, movementSpeed);
     }
 
-    void RotateToPour()
+    void RotateToPour(BottleController PourToBottle)
     {
         transform.RotateAround(rotationPivot, Vector3.forward, direction * rotationSpeed * Time.deltaTime); //rotate around above other bottle center point
 
-        rotationStart = waterPivots[currentWater - 1];
-        rotationEnd = (currentWater - layersToPour == 0) ? waterPivots[1] - (bottleMaskSR.bounds.size.y / 2.0f) : waterPivots[0];
+        rotationStart = waterPivots[currentWater - 1].transform.position.y;
+        rotationEnd = currentWater - layersToPour == 0 ? waterPivots[0].transform.position.y - (bottleMaskSR.bounds.size.y / 2.0f) : waterPivots[currentWater - layersToPour - 1].transform.position.y;
+        float fillChange = (layersToPour * layerHeight * Math.Clamp((fillDelta - (rotationPivot.y - rotationEnd)) / fillDelta, 0.0f, 1.0f));
+        float fillChangeThis = fillAmount - fillChange;
+        float fillChangeOther = PourToBottle.fillAmount + fillChange;
+        instanceMaterial.SetFloat("_FillAmount", fillChangeThis);
+        PourToBottle.instanceMaterial.SetFloat("_FillAmount", fillChangeOther);
 
-        float fillChange = fillAmount - (layersToPour * layerHeight * Math.Clamp((fillDelta - (rotationPivot.y - rotationEnd)) / fillDelta, 0.0f, 1.0f));
-        instanceMaterial.SetFloat("_FillAmount", fillChange);
 
         if (rotationStart > rotationPivot.y && !rotationStarted)
         {
-            rotationStarted = true;
-
             fillDelta = rotationPivot.y - rotationEnd;
 
+            rotationStarted = true;
             rotationSpeed = 30.0f;
         }
         if (rotationEnd > rotationPivot.y)
         {
+            fillAmount -= layersToPour * layerHeight;
+            instanceMaterial.SetFloat("_FillAmount", fillAmount == -15.0f ? -20.0f : fillAmount);
+            PourToBottle.fillAmount += layersToPour * layerHeight;
+            PourToBottle.instanceMaterial.SetFloat("_FillAmount", PourToBottle.fillAmount);
+
+            SetPourOut(layersToPour);
+            UpdateShaderLayers();
+
             rotationStarted = false;
-
-            fillAmount = fillAmount - layersToPour * layerHeight;
-            instanceMaterial.SetFloat("_FillAmount", fillAmount);
-
             rotationSpeed = 120.0f;
-
             movingStep = 3;
         }
     }
@@ -279,14 +259,17 @@ public class BottleController : MonoBehaviour
         this.selected = selected;
     }
 
-    public void PourTo(Vector3 target, int layersToPour) // initiate pouring animation
+    public void PourTo(Vector3 target, int layersToPour, BottleController bo) // initiate pouring animation
     {
+        PourToBottle = bo;
         direction = transform.position.x - target.x > 0 ? 1.0f : -1.0f;
         targetPosition = target + (transform.right * (direction * (bottleMaskSR.bounds.size.x / 2.0f)) + transform.up * bottleMaskSR.bounds.size.y / 2.0f);
-        rotationPivot = target + (transform.up * (bottleMaskSR.bounds.size.y));
+        rotationPivot = target + (transform.up * (float)Math.Round(bottleMaskSR.bounds.size.y));
         this.layersToPour = layersToPour;
-        targetRotation = (direction < 0 ? (360.0f - 90.0f) : 90.0f);
+        targetRotation = direction < 0 ? (360.0f - 90.0f) : 90.0f;
         movingStep = 1;
+        bo.SetFillIn(GetTopColor(), layersToPour);
+        bo.UpdateShaderLayers();
     }
 
 
