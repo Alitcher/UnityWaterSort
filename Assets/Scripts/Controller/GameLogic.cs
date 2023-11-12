@@ -15,6 +15,7 @@ public class GameLogic : MonoBehaviour
     private bool bottleSelected = false;
     private bool pouring = false;
     private BottleController selectedBottle;
+    private BottleController secondSelectedBottle;
 
     [SerializeField] private List<int> colorIndiciesPool = new List<int>();
     [SerializeField] private List<BottleController> bottleGameCollection;
@@ -87,7 +88,6 @@ public class GameLogic : MonoBehaviour
                 colorIndiciesPool.Add(c);
             }
         }
-        //Util.Shuffle(colorIndiciesPool);
     }
 
     public void ClearColorsLevel() 
@@ -115,6 +115,8 @@ public class GameLogic : MonoBehaviour
         bottleGameCollection.Clear();
     }
 
+    public int layersToPour;
+
     void HandleBottleMovement() // initiates pouring animation and selects/unselects bottles based on raycasts
     {
         //RaycastHit hit;
@@ -129,20 +131,30 @@ public class GameLogic : MonoBehaviour
                     bottleSelected = false;
                 }
                 else // Pour
-                { // initiate pouring animation from selected bottle to the bottle hit by ray
-                    BottleController secondSelectedBottle = hit.collider.gameObject.GetComponent<BottleController>();
+                {
+                    secondSelectedBottle = hit.collider.gameObject.GetComponent<BottleController>();
 
                     if (secondSelectedBottle.CheckFull())
                     {
                         return;
                     }
-                    selectedBottle.PourTo(secondSelectedBottle.gameObject.transform.position, 4);
+
+                    if (!CheckValidPour()) 
+                    {
+                        return;
+                    }
                     pouring = true;
+
+                    selectedBottle.PourTo(secondSelectedBottle.gameObject.transform.position, 3);
+                    secondSelectedBottle.SetFillIn(selectedBottle.GetTopColor(), layersToPour);
+                    selectedBottle.SetPourOut(layersToPour);
+
                 }
             }
             else
             { // select the bottle that the ray hit
                 selectedBottle = hit.collider.gameObject.GetComponent<BottleController>();
+                layersToPour = selectedBottle.GetLayersToPour();
                 if (!selectedBottle.CheckEmpty())
                 {
                     selectedBottle.SetSelected(true);
@@ -155,6 +167,14 @@ public class GameLogic : MonoBehaviour
             selectedBottle.SetSelected(false);
             bottleSelected = false;
         }
+
+    }
+
+    bool CheckValidPour()
+    {
+        return (selectedBottle.GetTopColor() == secondSelectedBottle.GetTopColor() &&
+               layersToPour + secondSelectedBottle.GetCurrentWater <= BottleCapacity) ||
+               secondSelectedBottle.CheckEmpty();
     }
 
     bool CheckGameFinished()
@@ -175,31 +195,7 @@ public class GameLogic : MonoBehaviour
         return false;
     }
 
-    bool CheckValidSelection()
-    {
-        /*
-         * * Alicia
-         TODO: Check for restrictions. The player can't pick a bottle if:
-        1. The bottle is empty
-        2. The bottle is being filled in by another bottle at the moment.
-         */
 
-        return false;
-    }
-
-    bool CheckValidPour()
-    {
-        /*
-         * Alicia
-         TODO: Check for restrictions. The source bottle cannot pour in the destination bottle if:
-        1. The liquid color on top of destination bottle does not match the color on top of the source(selected) bottle.
-        2. The destination bottle is full.
-
-        HINT: Iterate through the source and destination bottle in from top most and find the first color that is not 0 (empty).
-
-         */
-        return false;
-    }
 
     bool CheckNoMoreMove() //optional
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -30,6 +31,8 @@ public class BottleController : MonoBehaviour
     private ObjectPool<BottleController> _pool;
 
     [SerializeField] private int[] colorIndices = { 0, 0, 0, 0 };
+
+    private float layerHeight = 6.3f;
     /*
      check ColorSet scriptableObject the number is equivalent to the index of the color. For example:
         0 = empty, // always be on top most of the bottle. shouldn't be the case where the empty color is at the bottom and on top of it is some other colors.
@@ -39,8 +42,41 @@ public class BottleController : MonoBehaviour
      ColorSet
      */
 
-    private int currentWater; // goes between 0 - 4
-    private int layersToPour = 1;
+    [SerializeField] private int currentWater; // goes between 0 - 4
+    public int GetCurrentWater => currentWater;
+
+    public int GetLayersToPour()
+    {
+        int counts = 1;
+        int topColorIndex = colorIndices.Length - 1;
+
+        while (topColorIndex >= 0 && colorIndices[topColorIndex] == 0)
+        {
+            topColorIndex--; // Move down if we find an empty layer.
+        }
+
+        // If the bottle is empty, we return 0 because there's nothing to pour.
+        if (topColorIndex < 0)
+        {
+            return 0;
+        }
+
+        int topColor = colorIndices[topColorIndex];
+
+        for (int i = topColorIndex - 1; i >= 0; i--)
+        {
+            if (colorIndices[i] == topColor)
+            {
+                counts++; // Increment count if the color is the same.
+            }
+            else
+            {
+                break; // Stop counting if we hit a different color.
+            }
+        }
+        return counts;
+    }
+
 
     private void Awake()
     {
@@ -61,31 +97,46 @@ public class BottleController : MonoBehaviour
         ChangeColorsOnShader();
     }
 
-    public void SetFillIn()
+    public void SetFillIn(int fillColor, int layerCount)
     {
-        /*
-         currentWater++;
-         update color
-        ***UPDATE SHADER TOO***
-         */
-        instanceMaterial.SetFloat("_FillAmount", -15.0f);
+        for (int i = 0; i < layerCount; i++)
+        {
+            colorIndices[currentWater + i] = fillColor;
+        }
+        currentWater += layerCount;
+
+        float additionalFillAmount = layerCount * layerHeight;
+        float newFillAmount = instanceMaterial.GetFloat("_FillAmount") + additionalFillAmount;
+
+        UpdateShaderLayers(newFillAmount);
+
     }
 
-    public void SetPourOut()
+    public void SetPourOut(int layerCount)
     {
-        /*
-         currentWater--;
-         update color
+        for (int i = 1; i <= layerCount; i++)
+        {
+            colorIndices[currentWater - i] = 0;
+        }
+        currentWater -= layerCount;
 
-        ***UPDATE SHADER TOO***
-         */
-        instanceMaterial.SetFloat("_FillAmount", -15.0f);
+        float additionalFillAmount = layerCount * layerHeight;
+        float newFillAmount = instanceMaterial.GetFloat("_FillAmount") - additionalFillAmount;
+
+        UpdateShaderLayers(newFillAmount);
+
     }
 
-    void UpdateColor(int top, int color) 
+    private void UpdateShaderLayers(float newFillAmount)
     {
-        // TODO: UPDATE SHADER TOO
-        colorIndices[top] = color;
+
+
+        instanceMaterial.SetFloat("_FillAmount", newFillAmount);
+
+        for (int i = 0; i < GameLogic.BottleCapacity; i++)
+        {
+            instanceMaterial.SetColor("_C" + (i + 1), bottleColors.colors[colorIndices[i]]);
+        }
     }
 
     public bool CheckEmpty()
@@ -93,7 +144,7 @@ public class BottleController : MonoBehaviour
         return colorIndices[0] == 0;
     }
 
-    public bool CheckFull() 
+    public bool CheckFull()
     {
         return colorIndices[colorIndices.Length - 1] != 0;
     }
@@ -136,7 +187,7 @@ public class BottleController : MonoBehaviour
                 {
                     movingStep = 3;
                 }
-            } 
+            }
             else
             {
                 if (transform.eulerAngles.z > targetRotation && !firstCall)
@@ -216,22 +267,20 @@ public class BottleController : MonoBehaviour
 
     void ChangeColorsOnShader()
     {
-        // TODO: color index should not be fixed. It should randomize within colorset;
-        // Make sure that the color set to randomize is not over ColorCount inside the scriptableObject
-        //
         if (currentWater == 0)
         {
             instanceMaterial.SetFloat("_FillAmount", -15.0f);
-        } else
+        }
+
+        for (int i = 0; i < GameLogic.BottleCapacity; i++)
         {
-            for (int i = 0; i < currentWater; i++)
-            {
-                instanceMaterial.SetColor("_C" + (i + 1), bottleColors.colors[colorIndices[i]]);
-            }
+            instanceMaterial.SetColor("_C" + (i + 1), bottleColors.colors[colorIndices[i]]);
         }
     }
 
-    public void SetColorAt(int index, int color) 
+
+
+    public void SetColorAt(int index, int color)
     {
         colorIndices[index] = color;
     }
@@ -241,7 +290,7 @@ public class BottleController : MonoBehaviour
         _pool = pool;
     }
 
-    private int GetTopColor()
+    public int GetTopColor()
     {
         // Find the topmost color that isn't zero and return it.
         for (int i = colorIndices.Length - 1; i >= 0; i--)
