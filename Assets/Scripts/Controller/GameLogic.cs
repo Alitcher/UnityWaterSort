@@ -36,7 +36,6 @@ public class GameLogic : MonoBehaviour
         {
             HandleBottleMovement();
         }
-        Debug.Log(bottleOrder);
         #region Debug Control
         if (Input.GetMouseButtonDown(1))
         {
@@ -149,6 +148,7 @@ public class GameLogic : MonoBehaviour
                     {
                         return;
                     }
+
                     selectedBottle.SetOrderInLayer(bottleOrder);
                     selectedBottle.PourTo(secondSelectedBottle.gameObject.transform.position, layersToPour, secondSelectedBottle);
                     selectedBottle.SetSelected(false);
@@ -160,12 +160,21 @@ public class GameLogic : MonoBehaviour
                         bottleCompleteCount++;
                     }
 
+                    if (CheckGameFinished()) 
+                    {
+                        Debug.Log("Next Level soon!");
+                    }
+
                 }
             }
             else
             { // select the bottle that the ray hit
                 if (selectedBottle == null)
                 {
+                    if (hitBottle.CheckEmpty())
+                    {
+                        return;
+                    }
                     bottleOrder += 1;
                     selectedBottle = hitBottle;
                     layersToPour = selectedBottle.GetLayersToPour();
@@ -176,7 +185,7 @@ public class GameLogic : MonoBehaviour
                 {
                     bool A = hitBottle != selectedBottle && hitBottle != secondSelectedBottle;
                     bool B = (hitBottle == selectedBottle || hitBottle == secondSelectedBottle) && !selectedBottle.pouring;
-                    if ((A || B) && !hitBottle.CheckEmpty())
+                    if ((A || B) && !hitBottle.CheckEmpty()) //first pick
                     {
                         bottleOrder += 1;
                         secondSelectedBottle = null;
@@ -200,9 +209,9 @@ public class GameLogic : MonoBehaviour
 
     bool CheckValidPour()
     {
-        return (selectedBottle.GetTopColor() == secondSelectedBottle.GetTopColor() &&
-               layersToPour + secondSelectedBottle.GetCurrentWater <= BottleCapacity) ||
-               secondSelectedBottle.CheckEmpty() || !selectedBottle.CheckBottleComplete();
+        return ((selectedBottle.GetTopColor() == secondSelectedBottle.GetTopColor() || secondSelectedBottle.CheckEmpty()) &&
+               layersToPour + secondSelectedBottle.GetCurrentWater <= BottleCapacity) &&
+               (!selectedBottle.CheckBottleComplete());
     }
 
     bool CheckGameFinished()
