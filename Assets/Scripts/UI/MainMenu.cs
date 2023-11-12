@@ -7,12 +7,12 @@ public class MainMenu : MonoBehaviour
     public static MainMenu Instance;
 
     // Buttons
-    public Button StartButton;
-    public Button QuitButton;
+    [SerializeField] private Button StartButton;
+    [SerializeField] private Button QuitButton;
 
     // Cursors
-    public Texture2D CursorDefault;
-    public Vector2 CursorDefaultHotspot = Vector2.zero;
+    [SerializeField] private Texture2D CursorDefault;
+    [SerializeField] private Vector2 CursorDefaultHotspot = Vector2.zero;
 
     private void Awake()
     {
