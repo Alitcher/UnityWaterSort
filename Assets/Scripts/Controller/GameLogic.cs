@@ -11,8 +11,9 @@ public class GameLogic : MonoBehaviour
     [SerializeField] private LevelHolder levelsCollection;
     [SerializeField] private BottlePooler pooler;
 
+    private int bottleOrder = 0;
+
     private bool bottleSelected = false;
-    private bool pouring = false;
     private BottleController selectedBottle;
     private BottleController secondSelectedBottle;
 
@@ -35,13 +36,7 @@ public class GameLogic : MonoBehaviour
         {
             HandleBottleMovement();
         }
-
-        if (pouring && selectedBottle.transform.position == selectedBottle.startPosition)
-        {
-            bottleSelected = false;
-            pouring = false;
-        }
-
+        Debug.Log(bottleOrder);
         #region Debug Control
         if (Input.GetMouseButtonDown(1))
         {
@@ -128,18 +123,22 @@ public class GameLogic : MonoBehaviour
     {
         //RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit) && !pouring) // check if ray hit a gameobject with a collider
+        if (Physics.Raycast(ray, out RaycastHit hit)) // check if ray hit a gameobject with a collider
         {
+            BottleController hitBottle = hit.collider.gameObject.GetComponent<BottleController>();
+
             if (bottleSelected) // check if a bottle is already selected
             {
-                if (selectedBottle == hit.collider.gameObject.GetComponent<BottleController>()) // check if ray hit the bottle that is already selected
+                if (selectedBottle == hitBottle) // check if ray hit the bottle that is already selected
                 { // unselect the currently selected bottle
+                    bottleOrder -= 1;
                     selectedBottle.SetSelected(false);
                     bottleSelected = false;
+                    selectedBottle = null;
                 }
-                else // Pour
+                else if (secondSelectedBottle != hitBottle && !hitBottle.pouring)// Pour
                 {
-                    secondSelectedBottle = hit.collider.gameObject.GetComponent<BottleController>();
+                    secondSelectedBottle = hitBottle;
 
                     if (secondSelectedBottle.CheckFull())
                     {
@@ -150,10 +149,10 @@ public class GameLogic : MonoBehaviour
                     {
                         return;
                     }
-
-                    pouring = true;
-
+                    selectedBottle.SetOrderInLayer(bottleOrder);
                     selectedBottle.PourTo(secondSelectedBottle.gameObject.transform.position, layersToPour, secondSelectedBottle);
+                    selectedBottle.SetSelected(false);
+                    bottleSelected = false;
 
                     if (secondSelectedBottle.CheckBottleComplete()) 
                     {
@@ -165,19 +164,36 @@ public class GameLogic : MonoBehaviour
             }
             else
             { // select the bottle that the ray hit
-                selectedBottle = hit.collider.gameObject.GetComponent<BottleController>();
-                layersToPour = selectedBottle.GetLayersToPour();
-                if (!selectedBottle.CheckEmpty())
+                if (selectedBottle == null)
                 {
+                    bottleOrder += 1;
+                    selectedBottle = hitBottle;
+                    layersToPour = selectedBottle.GetLayersToPour();
                     selectedBottle.SetSelected(true);
                     bottleSelected = true;
+                } 
+                else
+                {
+                    bool A = hitBottle != selectedBottle && hitBottle != secondSelectedBottle;
+                    bool B = (hitBottle == selectedBottle || hitBottle == secondSelectedBottle) && !selectedBottle.pouring;
+                    if ((A || B) && !hitBottle.CheckEmpty())
+                    {
+                        bottleOrder += 1;
+                        secondSelectedBottle = null;
+                        selectedBottle = hitBottle;
+                        layersToPour = selectedBottle.GetLayersToPour();
+                        selectedBottle.SetSelected(true);
+                        bottleSelected = true;
+                    }
                 }
             }
         }
         else if (bottleSelected) // check if a bottle is already slected
         { // unselect the currently selected bottle
+            bottleOrder -= 1;
             selectedBottle.SetSelected(false);
             bottleSelected = false;
+            selectedBottle = null;
         }
 
     }

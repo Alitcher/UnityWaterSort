@@ -10,12 +10,13 @@ public class BottleController : MonoBehaviour
 
     private Material instanceMaterial;
 
+    [NonSerialized] public bool pouring = false;
     private bool selected = false;
     private bool rotationStarted = false;
     private int movingStep = 0;
     private float direction;
     private float targetRotation;
-    private float rotationSpeed = 120.0f;
+    private float rotationSpeed = 90.0f;
     private float rotationStart;
     private float rotationEnd;
     private float fillAmount;
@@ -28,7 +29,7 @@ public class BottleController : MonoBehaviour
 
     public GameObject[] waterPivots = new GameObject[4];
 
-    private BottleController PourToBottle; 
+    private BottleController pourToBottle; 
 
     private ObjectPool<BottleController> _pool;
 
@@ -150,7 +151,7 @@ public class BottleController : MonoBehaviour
 
         if (movingStep == 1 & transform.eulerAngles.z != targetRotation) // moving to other bottle
         {
-            transform.position = goTo(targetPosition, 3.0f);
+            transform.position = goTo(targetPosition, 1.0f);
             if (transform.position == targetPosition)
             {
                 movingStep = 2;
@@ -158,7 +159,7 @@ public class BottleController : MonoBehaviour
         }
         if (movingStep == 2) // rotating to pour
         {
-            RotateToPour(PourToBottle);
+            RotateToPour(pourToBottle);
         }
         if (movingStep == 3) // rotating to upright position
         {
@@ -166,12 +167,14 @@ public class BottleController : MonoBehaviour
         }
         if (movingStep == 4 & transform.position != startPosition) // moving back to original position
         {
-            transform.position = goTo(startPosition, 3.0f);
+            transform.position = goTo(startPosition, 1.0f);
             if (transform.position == startPosition)
             {
+                SetOrderInLayer(0);
+                pouring = false;
+                pourToBottle.pouring = false;
                 instanceMaterial.SetFloat("_SARM", 1.0f);
                 movingStep = 0;
-                SetSelected(false);
             }
         }
 
@@ -217,7 +220,7 @@ public class BottleController : MonoBehaviour
             UpdateShaderLayers();
 
             rotationStarted = false;
-            rotationSpeed = 120.0f;
+            rotationSpeed = 90.0f;
             movingStep = 3;
         }
     }
@@ -246,22 +249,20 @@ public class BottleController : MonoBehaviour
 
     public void SetSelected(bool selected) // set this bottle as seleced or not selected and change spriterenderers orders in layers
     {
-        if (selected)
-        {
-            GetComponent<SpriteRenderer>().sortingOrder = 2;
-            bottleMaskSR.sortingOrder = 2;
-        }
-        else
-        {
-            GetComponent<SpriteRenderer>().sortingOrder = 1;
-            bottleMaskSR.sortingOrder = 0;
-        }
         this.selected = selected;
+    }
+
+    public void SetOrderInLayer(int order)
+    {
+        GetComponent<SpriteRenderer>().sortingOrder = order;
+        bottleMaskSR.sortingOrder = order;
     }
 
     public void PourTo(Vector3 target, int layersToPour, BottleController bo) // initiate pouring animation
     {
-        PourToBottle = bo;
+        pouring = true;
+        bo.pouring = true;
+        pourToBottle = bo;
         direction = transform.position.x - target.x > 0 ? 1.0f : -1.0f;
         targetPosition = target + (transform.right * (direction * (bottleMaskSR.bounds.size.x / 2.0f)) + transform.up * bottleMaskSR.bounds.size.y / 2.0f);
         rotationPivot = target + (transform.up * (float)Math.Round(bottleMaskSR.bounds.size.y));
