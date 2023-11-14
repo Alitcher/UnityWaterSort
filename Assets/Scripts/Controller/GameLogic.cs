@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -5,8 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class GameLogic : MonoBehaviour
 {
+    private GameState gameState;
+    private int CurrentLevel;
+
     public const int BottleCapacity = 4;
-    public static int CurrentLevel = 3;
     [SerializeField] private ObjectPoolConfig objectPoolConfig;
     [SerializeField] private LevelHolder levelsCollection;
     [SerializeField] private BottlePooler pooler;
@@ -24,8 +27,11 @@ public class GameLogic : MonoBehaviour
     #region Reset these value when reset the game
     private int bottleCompleteCount = 0;
     #endregion
+
     private void Start()
     {
+        gameState = GameState.Instance;
+        CurrentLevel = gameState.GetCurrentLevel();
         DestroyAllBottles(); // destroy all bottles before restart the scene
         GenerateLevel();
     }
@@ -68,7 +74,7 @@ public class GameLogic : MonoBehaviour
             // Set name and position
             bottle.name = "bottle-" + i;
             bottle.transform.position = levelsCollection.LevelCollection[CurrentLevel].BottlePosition[i];
-            if (i < levelsCollection.LevelCollection[CurrentLevel].BottleCount - numberOfEmptyBottles)
+            if (i < colorCount)
             {
                 SetColorIndicies(bottle);
                 bottle.GenerateColor(BottleCapacity);
@@ -78,6 +84,8 @@ public class GameLogic : MonoBehaviour
             }
             bottleGameCollection.Add(bottle);
         }
+
+        CheckIfGameFinished(); // Because there is a chance it already is
     }
 
     public void GenerateColorsForLevel(int colorCount) 
@@ -100,9 +108,13 @@ public class GameLogic : MonoBehaviour
     {
         for (int i = 0; i < BottleCapacity; i++)
         {
-            int selectedIndex = Random.Range(0, colorIndiciesPool.Count);
+            int selectedIndex = UnityEngine.Random.Range(0, colorIndiciesPool.Count);
             bottle.SetColorAt(i, colorIndiciesPool[selectedIndex]);
             colorIndiciesPool.RemoveAt(selectedIndex);
+        }
+        if (bottle.CheckBottleComplete())
+        {
+            bottleCompleteCount++; // For when a bottle is already complete at start
         }
     }
 
@@ -149,11 +161,7 @@ public class GameLogic : MonoBehaviour
                             bottleCompleteCount++;
                         }
 
-                        if (CheckGameFinished())
-                        {
-                            Debug.Log("Next Level soon!");
-                            UnSelectSelectedBottle();
-                        }
+                        CheckIfGameFinished();
                     }
 
                 }
@@ -194,7 +202,7 @@ public class GameLogic : MonoBehaviour
     void UnSelectSelectedBottle()
     {
         bottleOrder -= 1;
-        selectedBottle.SetSelected(false);
+        if (selectedBottle) selectedBottle.SetSelected(false);
         bottleSelected = false;
         selectedBottle = null;
     }
@@ -206,14 +214,31 @@ public class GameLogic : MonoBehaviour
                (!selectedBottle.CheckBottleComplete());
     }
 
-    bool CheckGameFinished()
+    void CheckIfGameFinished()
     {
         if (bottleCompleteCount == levelsCollection.LevelCollection[CurrentLevel].colorCount) 
         {
             print("Game Clear!!");
-            return true;
+            GoToNextLevel();
         }
-        return false;
+    }
+
+    void GoToNextLevel()
+    {
+        Debug.Log("Next Level soon!");
+        UnSelectSelectedBottle();
+        if (CurrentLevel < levelsCollection.LevelCollection.Length - 1) // Repeat last level for now
+        {
+            gameState.IncreaseCurrentLevel();
+        }
+        StartCoroutine(GoToNextLevelCoroutine());
+    }
+
+    // Add UI for this instead later
+    IEnumerator GoToNextLevelCoroutine()
+    {
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene("Game");
     }
 
 
