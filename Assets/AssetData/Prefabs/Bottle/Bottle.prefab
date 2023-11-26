@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1400383475197072494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8585147334228788536}
+  m_Layer: 0
+  m_Name: liquidTip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8585147334228788536
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400383475197072494}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.5, y: 16, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7092480846657496168}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2776278632836812007
 GameObject:
   m_ObjectHideFlags: 0
@@ -98,6 +129,8 @@ Transform:
   - {fileID: 1606656627482050155}
   - {fileID: 8886842347760825157}
   - {fileID: 673928683781359837}
+  - {fileID: 7027241262291288307}
+  - {fileID: 8585147334228788536}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -165,9 +198,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6ee4214c8daa7f46ad11b2381a17e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  liquidLineRenderer: {fileID: 766939218735496788}
+  liquidTip: {fileID: 8585147334228788536}
+  liquidWidth: 43.5
   bottleColors: {fileID: 11400000, guid: ee2664daeb8d9704c8b16a20cec14225, type: 2}
   bottleMaskSR: {fileID: 7092480847453248015}
-  startPosition: {x: 0, y: 0, z: 0}
   waterPivots:
   - {fileID: 9184554255972329176}
   - {fileID: 7815915652690654814}
@@ -333,3 +368,84 @@ Transform:
   m_Father: {fileID: 7092480846657496168}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &5822419982365902137
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7092480846657496168}
+    m_Modifications:
+    - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4780134382294389277, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_Name
+      value: LiquidLine
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 70aa9e05e33b2284da544db48d09a449, type: 3}
+--- !u!120 &766939218735496788 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 6514970366996462445, guid: 70aa9e05e33b2284da544db48d09a449,
+    type: 3}
+  m_PrefabInstance: {fileID: 5822419982365902137}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7027241262291288307 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
+    type: 3}
+  m_PrefabInstance: {fileID: 5822419982365902137}
+  m_PrefabAsset: {fileID: 0}
