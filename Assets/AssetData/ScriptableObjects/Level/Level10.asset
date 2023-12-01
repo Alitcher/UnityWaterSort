@@ -10,19 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6878ff444e54c4f4caa9b19df6e88879, type: 3}
-  m_Name: Level7
+  m_Name: Level10
   m_EditorClassIdentifier: 
-  LevelId: 7
-  BottleCount: 10
+  LevelId: 10
+  BottleCount: 13
   BottlePosition:
-  - {x: -30, y: 40, z: 0}
-  - {x: 0, y: 40, z: 0}
-  - {x: 30, y: 40, z: 0}
-  - {x: -45, y: 0, z: 0}
-  - {x: -15, y: 0, z: 0}
-  - {x: 15, y: 0, z: 0}
-  - {x: 45, y: 0, z: 0}
-  - {x: -30, y: -40, z: 0}
-  - {x: 0, y: -40, z: 0}
-  - {x: 30, y: -40, z: 0}
-  colorCount: 8
+  - {x: -45, y: 40, z: 0}
+  - {x: -15, y: 40, z: 0}
+  - {x: 15, y: 40, z: 0}
+  - {x: 45, y: 40, z: 0}
+  - {x: -60, y: 0, z: 0}
+  - {x: -30, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 30, y: 0, z: 0}
+  - {x: 60, y: 0, z: 0}
+  - {x: -45, y: -40, z: 0}
+  - {x: -15, y: -40, z: 0}
+  - {x: 15, y: -40, z: 0}
+  - {x: 45, y: -40, z: 0}
+  colorCount: 11

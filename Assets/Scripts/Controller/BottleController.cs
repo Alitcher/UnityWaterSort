@@ -6,7 +6,6 @@ using UnityEngine.Pool;
 public class BottleController : MonoBehaviour
 {
     [SerializeField] private LineRenderer liquidLineRenderer;
-    [SerializeField] private Transform liquidTip;
     [SerializeField] private float liquidWidth;
     public ColorSet bottleColors;
     public SpriteRenderer bottleMaskSR;
@@ -195,8 +194,8 @@ public class BottleController : MonoBehaviour
     {
         liquidLineRenderer.startColor = bottleColors.colors[TopColor()]; // set color here
         liquidLineRenderer.endColor = bottleColors.colors[TopColor()];// set color here
-        liquidLineRenderer.SetPosition(0, liquidTip.position);
-        liquidLineRenderer.SetPosition(1, liquidTip.position - Vector3.up *liquidWidth);
+        liquidLineRenderer.SetPosition(0, rotationPivot);
+        liquidLineRenderer.SetPosition(1, rotationPivot - Vector3.up * liquidWidth);
 
         liquidLineRenderer.enabled = true;
     }
