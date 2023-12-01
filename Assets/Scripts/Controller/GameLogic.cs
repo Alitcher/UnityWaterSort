@@ -1,11 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 
 public class GameLogic : MonoBehaviour
 {
+    public static GameLogic Instance;
+
     private GameState gameState;
     private int currentLevel;
 
@@ -27,6 +29,14 @@ public class GameLogic : MonoBehaviour
     #region Reset these value when reset the game
     private int bottleCompleteCount = 0;
     #endregion
+
+    private void Awake()
+    {
+        if (Instance) Destroy(gameObject);
+        else Instance = this;
+
+        Events.OnGoToNextLevel += GoToNextLevel;
+    }
 
     private void Start()
     {
@@ -132,62 +142,69 @@ public class GameLogic : MonoBehaviour
 
     void HandleBottleMovement() // initiates pouring animation and selects/unselects bottles based on raycasts
     {
-        //RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit)) // check if ray hit a gameobject with a collider
+        if (!EventSystem.current.IsPointerOverGameObject()) // If not over UI that's not meant to be clicked through
         {
-            BottleController hitBottle = hit.collider.gameObject.GetComponent<BottleController>();
-
-            if (bottleSelected) // check if a bottle is already selected
+            //RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit)) // check if ray hit a gameobject with a collider
             {
-                if (selectedBottle == hitBottle) // check if ray hit the bottle that is already selected
-                { // unselect the currently selected bottle
-                    UnSelectSelectedBottle();
-                }
-                else if (secondSelectedBottle != hitBottle && !hitBottle.IsPouring()) // Pour
-                {
-                    secondSelectedBottle = hitBottle;
+                BottleController hitBottle = hit.collider.gameObject.GetComponent<BottleController>();
 
-                    if (!(secondSelectedBottle.CheckFull() || !CheckValidPour()))
+                if (bottleSelected) // check if a bottle is already selected
+                {
+                    if (selectedBottle == hitBottle) // check if ray hit the bottle that is already selected
                     {
-                        selectedBottle.SetOrderInLayer(bottleOrder);
-                        selectedBottle.StartPouringAnimation(secondSelectedBottle, layersToPour);
-                        selectedBottle.SetSelected(false);
-                        bottleSelected = false;
-
-                        if (secondSelectedBottle.CheckBottleComplete())
-                        {
-                            print(secondSelectedBottle.name + " completed!");
-                            bottleCompleteCount++;
-                        }
-
-                        CheckIfGameFinished();
+                        // Unselect the currently selected bottle
+                        UnSelectSelectedBottle();
                     }
+                    else if (secondSelectedBottle != hitBottle && !hitBottle.IsPouring()) // Pour
+                    {
+                        secondSelectedBottle = hitBottle;
 
+                        if (!(secondSelectedBottle.CheckFull() || !CheckValidPour()))
+                        {
+                            selectedBottle.SetOrderInLayer(bottleOrder);
+                            selectedBottle.StartPouringAnimation(secondSelectedBottle, layersToPour);
+                            selectedBottle.SetSelected(false);
+                            bottleSelected = false;
+
+                            if (secondSelectedBottle.CheckBottleComplete())
+                            {
+                                print(secondSelectedBottle.name + " completed!");
+                                bottleCompleteCount++;
+                            }
+
+                            CheckIfGameFinished();
+                        }
+                    }
                 }
-            }
-            else
-            { // select the bottle that the ray hit
-                if (selectedBottle == null) //first pick
-                {
-                    if(!hitBottle.CheckEmpty()) SetSelectedBottle(hitBottle);
-                } 
                 else
                 {
-                    bool A = hitBottle != selectedBottle && hitBottle != secondSelectedBottle;
-                    bool B = (hitBottle == selectedBottle || hitBottle == secondSelectedBottle) && !selectedBottle.IsPouring();
-                    if ((A || B) && !hitBottle.CheckEmpty())
+                    // Select the bottle that the ray hit
+                    if (selectedBottle == null) // First pick
                     {
-                        secondSelectedBottle = null;
-                        SetSelectedBottle(hitBottle);
+                        if (!hitBottle.CheckEmpty()) SetSelectedBottle(hitBottle);
+                    }
+                    else
+                    {
+                        bool A = hitBottle != selectedBottle && hitBottle != secondSelectedBottle;
+                        bool B = (hitBottle == selectedBottle || hitBottle == secondSelectedBottle) && !selectedBottle.IsPouring();
+                        if ((A || B) && !hitBottle.CheckEmpty())
+                        {
+                            secondSelectedBottle = null;
+                            SetSelectedBottle(hitBottle);
+                        }
                     }
                 }
             }
+            else if (bottleSelected) // Check if a bottle is already selected
+            {
+                // Unselect the currently selected bottle
+                UnSelectSelectedBottle();
+            }
         }
-        else if (bottleSelected) // check if a bottle is already slected
-        { // unselect the currently selected bottle
-            UnSelectSelectedBottle();
-        }
+
+        
     }
 
     void SetSelectedBottle(BottleController hitBottle)
@@ -219,25 +236,18 @@ public class GameLogic : MonoBehaviour
         if (bottleCompleteCount == levelsCollection.LevelCollection[currentLevel].colorCount) 
         {
             print("Game Clear!!");
-            GoToNextLevel();
+            StartCoroutine(HUD.Instance.ShowLevelCompleteOverlayCoroutine());
         }
     }
 
-    void GoToNextLevel()
+    public void GoToNextLevel()
     {
         Debug.Log("Next Level soon!");
         UnSelectSelectedBottle();
-        if (currentLevel < levelsCollection.LevelCollection.Length - 1) // Repeat last level for now
+        if (currentLevel < levelsCollection.LevelCollection.Length - 1) // Repeat lvl if no more lvls
         {
             gameState.IncreaseCurrentLevel();
         }
-        StartCoroutine(GoToNextLevelCoroutine());
-    }
-
-    // Add UI for this instead later
-    IEnumerator GoToNextLevelCoroutine()
-    {
-        yield return new WaitForSeconds(2);
         SceneManager.LoadScene("Game");
     }
 
@@ -253,5 +263,9 @@ public class GameLogic : MonoBehaviour
             2.2. If it goes through all pairs and finds no valid moves, it means the game has reached a point where you can't make any more moves, so it returns True.
         */
         return false;
+    }
+    private void OnDestroy()
+    {
+        Events.OnGoToNextLevel -= GoToNextLevel;
     }
 }
