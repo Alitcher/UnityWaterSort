@@ -895,6 +895,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3783009674ae7a046b6115363cf0368b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentLevel: 10
 --- !u!4 &1161416043
 Transform:
   m_ObjectHideFlags: 0
@@ -1008,7 +1009,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5148b071125fd84497d4f9aaf9780e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: {fileID: 1161416042}
   objectPoolConfig: {fileID: 11400000, guid: 180e0938d75721a439845667328b1512, type: 2}
   levelsCollection: {fileID: 11400000, guid: e262652604470424ca2e7900a269d8c2, type: 2}
   pooler: {fileID: 1620268514}

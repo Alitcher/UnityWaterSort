@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameLogic : MonoBehaviour
 {
     private GameState gameState;
-    private int CurrentLevel;
+    private int currentLevel;
 
     public const int BottleCapacity = 4;
     [SerializeField] private ObjectPoolConfig objectPoolConfig;
@@ -31,7 +31,7 @@ public class GameLogic : MonoBehaviour
     private void Start()
     {
         gameState = GameState.Instance;
-        CurrentLevel = gameState.GetCurrentLevel();
+        currentLevel = gameState.GetCurrentLevel();
         DestroyAllBottles(); // destroy all bottles before restart the scene
         GenerateLevel();
     }
@@ -60,8 +60,8 @@ public class GameLogic : MonoBehaviour
 
     public void GenerateLevel()
     {
-        int bottleCount = levelsCollection.LevelCollection[CurrentLevel].BottleCount;
-        int colorCount = levelsCollection.LevelCollection[CurrentLevel].colorCount;
+        int bottleCount = levelsCollection.LevelCollection[currentLevel].BottleCount;
+        int colorCount = levelsCollection.LevelCollection[currentLevel].colorCount;
         int numberOfEmptyBottles = bottleCount - colorCount;
         
         GenerateColorsForLevel(colorCount);
@@ -73,7 +73,7 @@ public class GameLogic : MonoBehaviour
             BottleController bottle = pooler.objectPool.Get();
             // Set name and position
             bottle.name = "bottle-" + i;
-            bottle.transform.position = levelsCollection.LevelCollection[CurrentLevel].BottlePosition[i];
+            bottle.transform.position = levelsCollection.LevelCollection[currentLevel].BottlePosition[i];
             if (i < colorCount)
             {
                 SetColorIndicies(bottle);
@@ -216,7 +216,7 @@ public class GameLogic : MonoBehaviour
 
     void CheckIfGameFinished()
     {
-        if (bottleCompleteCount == levelsCollection.LevelCollection[CurrentLevel].colorCount) 
+        if (bottleCompleteCount == levelsCollection.LevelCollection[currentLevel].colorCount) 
         {
             print("Game Clear!!");
             GoToNextLevel();
@@ -227,7 +227,7 @@ public class GameLogic : MonoBehaviour
     {
         Debug.Log("Next Level soon!");
         UnSelectSelectedBottle();
-        if (CurrentLevel < levelsCollection.LevelCollection.Length - 1) // Repeat last level for now
+        if (currentLevel < levelsCollection.LevelCollection.Length - 1) // Repeat last level for now
         {
             gameState.IncreaseCurrentLevel();
         }

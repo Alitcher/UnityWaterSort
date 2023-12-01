@@ -4,7 +4,7 @@ public class GameState : MonoBehaviour
 {
     public static GameState Instance;
 
-    private static int _currentLevel = 1;
+    [SerializeField] private int _currentLevel = 1;
 
     private void Awake()
     {

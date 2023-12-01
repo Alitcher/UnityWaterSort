@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: Level3
   m_EditorClassIdentifier: 
   LevelId: 3
-  BottleCount: 4
+  BottleCount: 6
   BottlePosition:
-  - {x: -15, y: 0, z: 0}
-  - {x: 15, y: 0, z: 0}
-  - {x: -15, y: -40, z: 0}
-  - {x: 15, y: -40, z: 0}
-  colorCount: 3
+  - {x: -30, y: 20, z: 0}
+  - {x: 0, y: 20, z: 0}
+  - {x: 30, y: 20, z: 0}
+  - {x: -30, y: -20, z: 0}
+  - {x: 0, y: -20, z: 0}
+  - {x: 30, y: -20, z: 0}
+  colorCount: 4
