@@ -16,11 +16,11 @@ public class UIInteractable : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerExit(PointerEventData data)
     {
-        Cursor.SetCursor(CursorDefault, CursorDefaultHotspot, CursorMode.Auto);
+        Cursor.SetCursor(CursorDefault, CursorDefaultHotspot, CursorMode.ForceSoftware);
     }
 
     private void OnDisable()
     {
-        Cursor.SetCursor(CursorDefault, CursorDefaultHotspot, CursorMode.Auto);
+        Cursor.SetCursor(CursorDefault, CursorDefaultHotspot, CursorMode.ForceSoftware);
     }
 }
