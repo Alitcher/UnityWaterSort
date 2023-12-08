@@ -307,7 +307,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 350, y: 170}
+  m_SizeDelta: {x: 340, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &172281859
 MonoBehaviour:
@@ -653,7 +653,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1328,7 +1328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3783009674ae7a046b6115363cf0368b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentLevel: 10
+  _currentLevel: 1
 --- !u!4 &1161416043
 Transform:
   m_ObjectHideFlags: 0

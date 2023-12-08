@@ -162,7 +162,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 360, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &139761307
 PrefabInstance:
@@ -881,7 +881,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -95}
-  m_SizeDelta: {x: 400, y: 270}
+  m_SizeDelta: {x: 320, y: 270}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &533095939
 MonoBehaviour:
@@ -1068,7 +1068,7 @@ PrefabInstance:
     - target: {fileID: 2478394674334712773, guid: a10dd27f8e6fbeb4189a66fb0baca365,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2478394674334712773, guid: a10dd27f8e6fbeb4189a66fb0baca365,
         type: 3}
@@ -1078,7 +1078,7 @@ PrefabInstance:
     - target: {fileID: 2478394674334712773, guid: a10dd27f8e6fbeb4189a66fb0baca365,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2478394674334712773, guid: a10dd27f8e6fbeb4189a66fb0baca365,
         type: 3}
@@ -1133,7 +1133,7 @@ PrefabInstance:
     - target: {fileID: 2478394674334712773, guid: a10dd27f8e6fbeb4189a66fb0baca365,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 140
+      value: -120
       objectReference: {fileID: 0}
     - target: {fileID: 2478394674334712773, guid: a10dd27f8e6fbeb4189a66fb0baca365,
         type: 3}
@@ -1219,12 +1219,14 @@ PrefabInstance:
     - target: {fileID: 1997179271776122739, guid: 8889869fc608b8e48812ac7b94d3aff7,
         type: 3}
       propertyPath: m_text
-      value: 'Made for University of Tartu course
+      value: 'Made for
 
-        Computer Graphics MTAT.03.015
+        University of Tartu course
 
-        in
-        autumn 2023'
+        Computer Graphics
+        MTAT.03.015
+
+        in autumn 2023'
       objectReference: {fileID: 0}
     - target: {fileID: 1997179271776122739, guid: 8889869fc608b8e48812ac7b94d3aff7,
         type: 3}
@@ -1235,6 +1237,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontSizeBase
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1997179271776122739, guid: 8889869fc608b8e48812ac7b94d3aff7,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294637793
       objectReference: {fileID: 0}
     - target: {fileID: 3253267362113382621, guid: 8889869fc608b8e48812ac7b94d3aff7,
         type: 3}
@@ -1507,7 +1514,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.5
+  m_MatchWidthOrHeight: 0.9
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1530,7 +1537,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
