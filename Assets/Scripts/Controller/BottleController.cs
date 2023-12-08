@@ -38,6 +38,8 @@ public class BottleController : MonoBehaviour
 
     [SerializeField] private int[] colorIndices = { 0, 0, 0, 0 }; //check ColorSet scriptableObject the number is equivalent to the index of the color.
 
+    [SerializeField] private ParticleSystem bottleCompleteParticles;
+
 
     private void Awake()
     {
@@ -164,6 +166,10 @@ public class BottleController : MonoBehaviour
             pouringRotationStarted = false;
             rotationSpeed = 120.0f;
 
+            if (targetBottle.CheckBottleComplete())
+            {
+                targetBottle.bottleCompleteParticles.Play();
+            }
             pouringAnimationStep = 3;
         }
     }
