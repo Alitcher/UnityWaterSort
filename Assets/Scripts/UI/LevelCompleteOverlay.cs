@@ -8,6 +8,8 @@ public class LevelCompleteOverlay : MonoBehaviour
     // Buttons
     [SerializeField] private Button NextButton;
 
+    [SerializeField] private ParticleSystem LevelCompleteParticles;
+
     private void Awake()
     {
         if (Instance) Destroy(gameObject);
@@ -17,5 +19,10 @@ public class LevelCompleteOverlay : MonoBehaviour
     private void Start()
     {
         NextButton.onClick.AddListener(() => Events.GoToNextLevel());
+    }
+
+    public void PlayLevelCompleteParticles()
+    {
+        LevelCompleteParticles.Play();
     }
 }

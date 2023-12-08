@@ -7,7 +7,7 @@ public class HUD : MonoBehaviour
     public static HUD Instance;
 
     [SerializeField] private GameObject EscMenu;
-    [SerializeField] private GameObject LevelCompleteOverlay;
+    [SerializeField] private LevelCompleteOverlay LevelCompleteOverlay;
     [SerializeField] private TMP_Text LevelText;
     
     private void Awake()
@@ -36,7 +36,8 @@ public class HUD : MonoBehaviour
 
     public IEnumerator ShowLevelCompleteOverlayCoroutine()
     {
-        yield return new WaitForSeconds(2);
-        LevelCompleteOverlay.SetActive(true);
+        yield return new WaitForSeconds(2.5f);
+        LevelCompleteOverlay.PlayLevelCompleteParticles();
+        LevelCompleteOverlay.gameObject.SetActive(true);
     }
 }
