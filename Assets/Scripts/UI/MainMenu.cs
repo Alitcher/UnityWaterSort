@@ -10,10 +10,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button StartButton;
     [SerializeField] private Button QuitButton;
 
-    // Cursors
-    [SerializeField] private Texture2D CursorDefault;
-    [SerializeField] private Vector2 CursorDefaultHotspot = Vector2.zero;
-
     private void Awake()
     {
         if (Instance)
@@ -26,7 +22,6 @@ public class MainMenu : MonoBehaviour
         StartButton.onClick.AddListener(() => StartGame());
         QuitButton.onClick.AddListener(() => QuitGame());
 
-        Cursor.SetCursor(CursorDefault, CursorDefaultHotspot, CursorMode.Auto);
     }
 
     public void StartGame()
