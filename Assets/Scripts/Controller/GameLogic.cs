@@ -35,6 +35,7 @@ public class GameLogic : MonoBehaviour
         if (Instance) Destroy(gameObject);
         else Instance = this;
 
+        Events.OnGameStateChange += CheckGameState;
         Events.OnGoToNextLevel += GoToNextLevel;
     }
 
@@ -95,7 +96,8 @@ public class GameLogic : MonoBehaviour
             bottleGameCollection.Add(bottle);
         }
 
-        CheckIfGameFinished(); // Because there is a chance it already is
+        // Because the game could be done or have no moves also at the start
+        CheckGameState();
     }
 
     public void GenerateColorsForLevel(int colorCount) 
@@ -138,8 +140,6 @@ public class GameLogic : MonoBehaviour
         bottleGameCollection.Clear();
     }
 
-    public int layersToPour;
-
     void HandleBottleMovement() // initiates pouring animation and selects/unselects bottles based on raycasts
     {
         if (!EventSystem.current.IsPointerOverGameObject()) // If not over UI that's not meant to be clicked through
@@ -161,10 +161,10 @@ public class GameLogic : MonoBehaviour
                     {
                         secondSelectedBottle = hitBottle;
 
-                        if (!(secondSelectedBottle.CheckFull() || !CheckValidPour()))
+                        if (!(secondSelectedBottle.CheckFull() || !CheckValidPour(selectedBottle, secondSelectedBottle)))
                         {
                             selectedBottle.SetOrderInLayer(bottleOrder);
-                            selectedBottle.StartPouringAnimation(secondSelectedBottle, layersToPour);
+                            selectedBottle.StartPouringAnimation(secondSelectedBottle, selectedBottle.LayersToPour());
                             selectedBottle.SetSelected(false);
                             bottleSelected = false;
 
@@ -173,8 +173,6 @@ public class GameLogic : MonoBehaviour
                                 print(secondSelectedBottle.name + " completed!");
                                 bottleCompleteCount++;
                             }
-
-                            CheckIfGameFinished();
                         }
                     }
                 }
@@ -211,7 +209,6 @@ public class GameLogic : MonoBehaviour
     {
         bottleOrder += 1;
         selectedBottle = hitBottle;
-        layersToPour = selectedBottle.LayersToPour();
         selectedBottle.SetSelected(true);
         bottleSelected = true;
     }
@@ -224,20 +221,35 @@ public class GameLogic : MonoBehaviour
         selectedBottle = null;
     }
 
-    bool CheckValidPour()
+    bool CheckValidPour(BottleController sourceBottle, BottleController destinationBottle)
     {
-        return ((selectedBottle.TopColor() == secondSelectedBottle.TopColor() || secondSelectedBottle.CheckEmpty()) &&
-               layersToPour + secondSelectedBottle.GetCurrentWater() <= BottleCapacity) &&
-               (!selectedBottle.CheckBottleComplete());
+        return sourceBottle != destinationBottle && // not pouring to itself
+            (sourceBottle.TopColor() == destinationBottle.TopColor() || destinationBottle.CheckEmpty()) && // color same or destination empty
+            sourceBottle.LayersToPour() + destinationBottle.GetCurrentWater() <= BottleCapacity && // destination has space
+            (!sourceBottle.CheckBottleComplete()); // source isn't already complete
+    }
+
+    /// <summary>
+    /// Performs checks necessary after game state changes, such as pouring and starting a new level
+    /// </summary>
+    void CheckGameState()
+    {
+        CheckIfGameFinished();
+        CheckNoMoreMoves();
     }
 
     void CheckIfGameFinished()
     {
-        if (bottleCompleteCount == levelsCollection.LevelCollection[currentLevel].colorCount) 
+        if (GameFinished()) 
         {
             print("Game Clear!!");
             StartCoroutine(HUD.Instance.ShowLevelCompleteOverlayCoroutine());
         }
+    }
+
+    bool GameFinished()
+    {
+        return bottleCompleteCount == levelsCollection.LevelCollection[currentLevel].colorCount;
     }
 
     public void GoToNextLevel()
@@ -253,19 +265,28 @@ public class GameLogic : MonoBehaviour
 
 
 
-    bool CheckNoMoreMove() //optional
+    void CheckNoMoreMoves()
     {
-        /*
-        TODO: Check if there are no more moves left in the game.
-        1. Iterate through each pair of bottles on the game board (source and destination).
-        2. For each pair, check if you can pour from the source bottle to the destination bottle using the CheckValidPour() function. 
-            2.1. If you can, it means there's a valid move, and it returns False.
-            2.2. If it goes through all pairs and finds no valid moves, it means the game has reached a point where you can't make any more moves, so it returns True.
-        */
-        return false;
+        foreach (BottleController sourceBottle in bottleGameCollection)
+        {
+            foreach (BottleController destinationBottle in bottleGameCollection)
+            {
+                if (CheckValidPour(sourceBottle, destinationBottle))
+                {
+                    return;
+                }
+            }
+        }
+
+        if (!GameFinished())
+        {
+            print("No More Moves :(");
+            StartCoroutine(HUD.Instance.ShowNoMoreMovesOverlayCoroutine());
+        }
     }
     private void OnDestroy()
     {
+        Events.OnGameStateChange -= CheckGameState;
         Events.OnGoToNextLevel -= GoToNextLevel;
     }
 }
