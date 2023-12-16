@@ -2,22 +2,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class EscMenu : MonoBehaviour
+public class NoMoreMovesOverlay : MonoBehaviour
 {
-    public static EscMenu Instance;
+    public static NoMoreMovesOverlay Instance;
 
     // Buttons
     [SerializeField] private Button RestartButton;
-    [SerializeField] private Button MenuButton;
-    [SerializeField] private Button QuitButton;
 
     private void Awake()
     {
         if (Instance) Destroy(gameObject);
         else Instance = this;
+    }
 
+    private void Start()
+    {
         RestartButton.onClick.AddListener(() => SceneManager.LoadScene("Game"));
-        MenuButton.onClick.AddListener(() => SceneManager.LoadScene("MainMenu"));
-        QuitButton.onClick.AddListener(() => Application.Quit());
     }
 }

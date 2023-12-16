@@ -7,6 +7,7 @@ public class HUD : MonoBehaviour
     public static HUD Instance;
 
     [SerializeField] private GameObject EscMenu;
+    [SerializeField] private NoMoreMovesOverlay NoMoreMovesOverlay;
     [SerializeField] private LevelCompleteOverlay LevelCompleteOverlay;
     [SerializeField] private TMP_Text LevelText;
     
@@ -34,9 +35,15 @@ public class HUD : MonoBehaviour
         EscMenu.SetActive(!EscMenu.activeSelf);
     }
 
+    public IEnumerator ShowNoMoreMovesOverlayCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        NoMoreMovesOverlay.gameObject.SetActive(true);
+    }
+
     public IEnumerator ShowLevelCompleteOverlayCoroutine()
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(0.5f);
         LevelCompleteOverlay.PlayLevelCompleteParticles();
         LevelCompleteOverlay.gameObject.SetActive(true);
     }

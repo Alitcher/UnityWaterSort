@@ -19,18 +19,7 @@ public class MainMenu : MonoBehaviour
         }
         Instance = this;
 
-        StartButton.onClick.AddListener(() => StartGame());
-        QuitButton.onClick.AddListener(() => QuitGame());
-
-    }
-
-    public void StartGame()
-    {
-        SceneManager.LoadScene("Game");
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
+        StartButton.onClick.AddListener(() => SceneManager.LoadScene("Game"));
+        QuitButton.onClick.AddListener(() => Application.Quit());
     }
 }

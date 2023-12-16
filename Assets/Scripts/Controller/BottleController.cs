@@ -21,7 +21,7 @@ public class BottleController : MonoBehaviour
     private int layersToPour; // number of water layers to pour during one pouring animation, goes between 1 - 4
 
     private float directionOfRotation; // direction of rotation, -1 if to the right, 1 if to the left
-    private float rotationSpeed = 120.0f; // number of degrees to rotate per second
+    private float rotationSpeed = 180.0f; // number of degrees to rotate per second
     private float fillAmount; // amount of water shown by the shadermaterial, goes between -15.0(-20.0) and 10.0
     private float fillDelta; // distance between two y-axis coordinates, that dictate when water is poured during the animation
     private float layerHeight = 6.25f; // height of one water layer in the shadermaterial
@@ -57,16 +57,16 @@ public class BottleController : MonoBehaviour
     {
         if (selected & transform.position != selectedPosition & pouringAnimationStep == 0) // moving up when selected
         {
-            transform.position = goTo(selectedPosition, 1.0f);
+            transform.position = goTo(selectedPosition, 100.0f);
         }
         if (!selected & transform.position != startPosition & pouringAnimationStep == 0) // moving down when unselected
         {
-            transform.position = goTo(startPosition, 1.0f);
+            transform.position = goTo(startPosition, 100.0f);
         }
 
         if (pouringAnimationStep == 1) // moving to other bottle
         {
-            transform.position = goTo(targetPosition, 2.0f);
+            transform.position = goTo(targetPosition, 250.0f);
             if (transform.position == targetPosition)
             {
                 pouringAnimationStep = 2;
@@ -84,7 +84,7 @@ public class BottleController : MonoBehaviour
         }
         if (pouringAnimationStep == 4 & transform.position != startPosition) // moving back to original position
         {
-            transform.position = goTo(startPosition, 2.0f);
+            transform.position = goTo(startPosition, 250.0f);
             if (transform.position == startPosition)
             {
                 SetOrderInLayer(0);
@@ -92,6 +92,7 @@ public class BottleController : MonoBehaviour
                 targetBottle.pouring = false;
                 instanceMaterial.SetFloat("_SARM", 1.0f);
                 pouringAnimationStep = 0;
+                Events.GameStateChange();
             }
         }
         if (pouringAnimationStep == 2 || pouringAnimationStep == 3)
@@ -128,7 +129,7 @@ public class BottleController : MonoBehaviour
 
     Vector3 goTo(Vector3 targetPosition, float movementSpeed) // increment bottle position towards target position
     {
-        return Vector3.MoveTowards(transform.position, targetPosition, movementSpeed);
+        return Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
     }
 
     void RotateToPour(BottleController targetBottle)
@@ -151,7 +152,7 @@ public class BottleController : MonoBehaviour
             fillDelta = rotationPivot.y - rotationEnd;
 
             pouringRotationStarted = true;
-            rotationSpeed = 30.0f;
+            rotationSpeed = 60.0f;
         }
         if (rotationEnd > rotationPivot.y)
         {
@@ -164,7 +165,7 @@ public class BottleController : MonoBehaviour
             UpdateShaderLayers();
 
             pouringRotationStarted = false;
-            rotationSpeed = 120.0f;
+            rotationSpeed = 180.0f;
 
             if (targetBottle.CheckBottleComplete())
             {
