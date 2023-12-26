@@ -48,6 +48,8 @@ Material:
     - _MaxPortion: 3.75
     - _MidPortion: -2.5
     - _MinPortion: -8.75
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _SARM: 1
     - _ScaleFactor: 1
     - _WaterPortion: 5
@@ -64,3 +66,16 @@ Material:
     - _Color03: {r: 1, g: 0.8097839, b: 0.44716978, a: 1}
     - _Color04: {r: 1, g: 0.9167996, b: 0, a: 1}
   m_BuildTextureStacks: []
+--- !u!114 &6992500996766529001
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
