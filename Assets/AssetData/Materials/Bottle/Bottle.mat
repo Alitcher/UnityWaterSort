@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6272965296087085491
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -7,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BGWaterOld
-  m_Shader: {fileID: -6465566751694194690, guid: ff24e94ed60bc044382bfc9a0818a9ec,
+  m_Name: Bottle
+  m_Shader: {fileID: -6465566751694194690, guid: 28e9c5c4ed6ace14d8cdb38507b22ceb,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -21,19 +34,11 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MaskTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NormalMap:
+    - _MainTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -51,29 +56,22 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Brightness: 2.01
-    - _Depth: -1.48
-    - _EnableExternalAlpha: 0
+    - _FillAmount: 10
+    - _MaxPortion: 3.75
+    - _MidPortion: -2.5
+    - _MinPortion: -8.75
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Speed: 0.1
-    - _Waviness: 0.2
+    - _SARM: 1
+    - _ScaleFactor: 1
+    - _WaterScaleRotationMultiplier: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Dimensions: {r: 1, g: 0.25, b: 0, a: 0}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _C1: {r: 1, g: 1, b: 1, a: 1}
+    - _C2: {r: 1, g: 0.7372549, b: 0.4392157, a: 1}
+    - _C3: {r: 1, g: 0.4470588, b: 0.4470588, a: 1}
+    - _C4: {r: 0.2509804, g: 0.5333334, b: 0.8196079, a: 1}
+    - _Color01: {r: 1, g: 1, b: 1, a: 1}
+    - _Color02: {r: 1, g: 0.7372549, b: 0.4392157, a: 1}
+    - _Color03: {r: 1, g: 0.4470588, b: 0.4470588, a: 1}
+    - _Color04: {r: 0.2509804, g: 0.5333334, b: 0.8196079, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &353387506012079569
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 5

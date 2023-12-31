@@ -22,7 +22,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Normal1:
-        m_Texture: {fileID: 2800000, guid: c2f558247e586184c9d992a194fdcc92, type: 3}
+        m_Texture: {fileID: 2800000, guid: d94cb181d60234f488b6f272b9cd1ef4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal2:
@@ -43,9 +43,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaClipThreshold: 0
     - _Depth: -0.01
+    - _NormalStrength: 0.35
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Smoothness: 0.561
     - _Strength: 0.16
     m_Colors: []
   m_BuildTextureStacks: []
