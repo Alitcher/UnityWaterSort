@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BGWater
-  m_Shader: {fileID: -6465566751694194690, guid: ce020e3f8bc9c434b9bc6c41900c0fe8,
+  m_Name: BGWaterOld
+  m_Shader: {fileID: -6465566751694194690, guid: ff24e94ed60bc044382bfc9a0818a9ec,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -21,12 +21,20 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Normal1:
-        m_Texture: {fileID: 2800000, guid: c2f558247e586184c9d992a194fdcc92, type: 3}
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Normal2:
-        m_Texture: {fileID: 2800000, guid: c2f558247e586184c9d992a194fdcc92, type: 3}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -43,13 +51,20 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Depth: -0.01
+    - _Brightness: 2.01
+    - _Depth: -1.48
+    - _EnableExternalAlpha: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Strength: 0.16
-    m_Colors: []
+    - _Speed: 0.1
+    - _Waviness: 0.2
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Dimensions: {r: 1, g: 0.25, b: 0, a: 0}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &3554633468246599651
+--- !u!114 &353387506012079569
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
