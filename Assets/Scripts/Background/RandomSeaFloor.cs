@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Code for this class was taken from https://github.com/Pang/ProceduralTerrainScripts and modified to suit the needs of this project
 [RequireComponent(typeof(MeshFilter))]
 public class RandomSeaFloor : MonoBehaviour
 {
