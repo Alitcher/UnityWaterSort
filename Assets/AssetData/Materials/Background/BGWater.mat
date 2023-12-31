@@ -45,7 +45,8 @@ Material:
     m_Floats:
     - _AlphaClipThreshold: 0
     - _Depth: -0.01
-    - _NormalStrength: 0.35
+    - _Displacement: 1.7
+    - _NormalStrength: 0.158
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Smoothness: 0.561
