@@ -404,6 +404,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: LiquidLine
       objectReference: {fileID: 0}
+    - target: {fileID: 6514970366996462445, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6514970366996462445, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6514970366996462445, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70aa9e05e33b2284da544db48d09a449, type: 3}
 --- !u!120 &766939218735496788 stripped

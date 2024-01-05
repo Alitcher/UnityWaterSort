@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.Pool;
 
 
@@ -10,7 +11,7 @@ public class BottleController : MonoBehaviour
     public ColorSet bottleColors;
     public SpriteRenderer bottleMaskSR;
 
-    private Material instanceMaterial;
+    [NonSerialized] public Material instanceMaterial;
 
     private bool pouring = false; // true while selected bottles pouringAnimationStep != 0
     private bool selected = false; // true when selected, false when pouringAnimationStep != 0
@@ -40,11 +41,16 @@ public class BottleController : MonoBehaviour
 
     [SerializeField] private ParticleSystem bottleCompleteParticles;
 
+    private Light movablePointlight;
+
 
     private void Awake()
     {
         instanceMaterial = bottleMaskSR.material;
         fillAmount = instanceMaterial.GetFloat("_FillAmount");
+
+        movablePointlight = FindObjectOfType<Light>();
+        movablePointlight.intensity = 0;
     }
 
     void Start()
@@ -55,6 +61,12 @@ public class BottleController : MonoBehaviour
 
     void Update()
     {
+        // Material change
+
+        if (Input.GetKeyDown(KeyCode.Alpha1)) ChangeMaterial(1); //basic
+        if (Input.GetKeyDown(KeyCode.Alpha2)) ChangeMaterial(2); //metallic
+        if (Input.GetKeyDown(KeyCode.Alpha3)) ChangeMaterial(3); //glittery
+
         if (selected & transform.position != selectedPosition & pouringAnimationStep == 0) // moving up when selected
         {
             transform.position = goTo(selectedPosition, 100.0f);
@@ -101,11 +113,6 @@ public class BottleController : MonoBehaviour
             instanceMaterial.SetFloat("_SARM", 1.0f - (0.7f * normalizedRotationZ));
         }
     }
-
-    
-
-
-
 
     // pouring animation functions
 
@@ -197,7 +204,7 @@ public class BottleController : MonoBehaviour
         }
     }
 
-    private void SetActiveLiquidLine() 
+    private void SetActiveLiquidLine()
     {
         liquidLineRenderer.startColor = bottleColors.colors[TopColor()]; // set color here
         liquidLineRenderer.endColor = bottleColors.colors[TopColor()];// set color here
@@ -348,5 +355,12 @@ public class BottleController : MonoBehaviour
         {
             instanceMaterial.SetColor("_C" + (i + 1), bottleColors.colors[colorIndices[i]]);
         }
+    }
+
+    void ChangeMaterial(int matNr)
+    {
+        Light movablePointlight = FindObjectOfType<Light>();
+        movablePointlight.intensity = (matNr == 2 ? 1000 : 0);
+        instanceMaterial.SetFloat("_MaterialNumber", matNr);
     }
 }
