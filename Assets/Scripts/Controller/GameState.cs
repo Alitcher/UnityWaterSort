@@ -37,8 +37,6 @@ public class GameState : MonoBehaviour
 
     void ChangeMaterial(int matNr)
     {
-        Light movablePointLight = GameObject.FindGameObjectWithTag("MovablePointLight").GetComponent<Light>();
-        movablePointLight.intensity = matNr == 2 ? 1000 : 0;
         _currentShader = matNr;
     }
 

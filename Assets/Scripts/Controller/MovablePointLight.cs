@@ -2,13 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightManipulation : MonoBehaviour
+public class MovablePointLight : MonoBehaviour
 {
+    private Light _light;
     [SerializeField] private float bottlesZPos;
     /// <summary>
     /// Depth diff between point light and bottles. Needs to be positive.
     /// </summary>
     [SerializeField] private float lightDistance;
+
+    private void Awake()
+    {
+        _light = GetComponent<Light>();
+        Events.OnChangeBottleMaterial += ChangeBottleMaterial;
+    }
 
     void Update()
     {
@@ -17,5 +24,15 @@ public class LightManipulation : MonoBehaviour
         mousePosition.z = bottlesZPos - Camera.main.transform.position.z - lightDistance;
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
         transform.position = worldPosition;
+    }
+
+    void ChangeBottleMaterial(int matNr)
+    {
+        _light.intensity = matNr == 2 ? 1000 : 0;
+    }
+
+    private void OnDestroy()
+    {
+        Events.OnChangeBottleMaterial -= ChangeBottleMaterial;
     }
 }
