@@ -45,6 +45,7 @@ public class GameLogic : MonoBehaviour
         currentLevel = gameState.GetCurrentLevel();
         DestroyAllBottles(); // destroy all bottles before restart the scene
         GenerateLevel();
+        Events.ChangeBottleMaterial(GameState.Instance.GetCurrentShader());
     }
 
     void Update()
@@ -53,6 +54,13 @@ public class GameLogic : MonoBehaviour
         {
             HandleBottleMovement();
         }
+
+        // Material change
+
+        if (Input.GetKeyDown(KeyCode.Alpha1)) Events.ChangeBottleMaterial(1); //basic
+        if (Input.GetKeyDown(KeyCode.Alpha2)) Events.ChangeBottleMaterial(2); //metallic
+        if (Input.GetKeyDown(KeyCode.Alpha3)) Events.ChangeBottleMaterial(3); //glittery
+
         #region Debug Control
         if (Input.GetMouseButtonDown(1))
         {
@@ -284,6 +292,7 @@ public class GameLogic : MonoBehaviour
             StartCoroutine(HUD.Instance.ShowNoMoreMovesOverlayCoroutine());
         }
     }
+
     private void OnDestroy()
     {
         Events.OnGameStateChange -= CheckGameState;
