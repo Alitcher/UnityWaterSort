@@ -5,7 +5,6 @@ using UnityEngine;
 public class MovablePointLight : MonoBehaviour
 {
     private Light _light;
-    [SerializeField] private float bottlesZPos;
     /// <summary>
     /// Depth diff between point light and bottles. Needs to be positive.
     /// </summary>
@@ -21,7 +20,7 @@ public class MovablePointLight : MonoBehaviour
     {
         Vector3 mousePosition = Input.mousePosition;
         // ScreenToWorldPoint will add input z to camera's z to get output z
-        mousePosition.z = bottlesZPos - Camera.main.transform.position.z - lightDistance;
+        mousePosition.z = GameLogic.Instance.transform.position.z - Camera.main.transform.position.z - lightDistance;
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
         transform.position = worldPosition;
     }

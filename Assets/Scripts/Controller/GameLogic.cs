@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public class GameLogic : MonoBehaviour
 {
@@ -11,6 +10,10 @@ public class GameLogic : MonoBehaviour
     private GameState gameState;
     private int currentLevel;
 
+    /// <summary>
+    /// Distance of bottles from the camera along the Z-axis
+    /// </summary>
+    public int bottleDistance;
     public const int BottleCapacity = 4;
     [SerializeField] private ObjectPoolConfig objectPoolConfig;
     [SerializeField] private LevelHolder levelsCollection;
@@ -43,6 +46,8 @@ public class GameLogic : MonoBehaviour
     {
         gameState = GameState.Instance;
         currentLevel = gameState.GetCurrentLevel();
+        transform.position = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z + bottleDistance);
+
         DestroyAllBottles(); // destroy all bottles before restart the scene
         GenerateLevel();
         Events.ChangeBottleMaterial(GameState.Instance.GetCurrentShader());
@@ -92,7 +97,8 @@ public class GameLogic : MonoBehaviour
             BottleController bottle = pooler.objectPool.Get();
             // Set name and position
             bottle.name = "bottle-" + i;
-            bottle.transform.position = levelsCollection.LevelCollection[currentLevel].BottlePosition[i];
+            Vector2 xyPos = levelsCollection.LevelCollection[currentLevel].BottlePosition[i];
+            bottle.transform.position = new Vector3(xyPos.x, xyPos.y, transform.position.z);
             if (i < colorCount)
             {
                 SetColorIndicies(bottle);
