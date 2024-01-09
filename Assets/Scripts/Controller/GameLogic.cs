@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public class GameLogic : MonoBehaviour
 {
@@ -11,6 +10,10 @@ public class GameLogic : MonoBehaviour
     private GameState gameState;
     private int currentLevel;
 
+    /// <summary>
+    /// Distance of bottles from the camera along the Z-axis
+    /// </summary>
+    public int bottleDistance;
     public const int BottleCapacity = 4;
     [SerializeField] private ObjectPoolConfig objectPoolConfig;
     [SerializeField] private LevelHolder levelsCollection;
@@ -22,7 +25,7 @@ public class GameLogic : MonoBehaviour
     private BottleController selectedBottle;
     private BottleController secondSelectedBottle;
 
-    [SerializeField] private List<int> colorIndiciesPool = new List<int>();
+    [SerializeField] private List<int> colorIndiciesPool = new();
     [SerializeField] private List<BottleController> bottleGameCollection;
 
 
@@ -43,8 +46,12 @@ public class GameLogic : MonoBehaviour
     {
         gameState = GameState.Instance;
         currentLevel = gameState.GetCurrentLevel();
+        transform.position = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z + bottleDistance);
+
+        Events.ChangeBGColor(levelsCollection.LevelCollection[currentLevel].BGWaterColor);
         DestroyAllBottles(); // destroy all bottles before restart the scene
-        GenerateLevel();
+        GenerateLevel(); // make new bottles
+        Events.ChangeBottleMaterial(GameState.Instance.GetCurrentShader());
     }
 
     void Update()
@@ -53,6 +60,13 @@ public class GameLogic : MonoBehaviour
         {
             HandleBottleMovement();
         }
+
+        // Material change
+
+        if (Input.GetKeyDown(KeyCode.Alpha1)) Events.ChangeBottleMaterial(1); //basic
+        if (Input.GetKeyDown(KeyCode.Alpha2)) Events.ChangeBottleMaterial(2); //metallic
+        if (Input.GetKeyDown(KeyCode.Alpha3)) Events.ChangeBottleMaterial(3); //glittery
+
         #region Debug Control
         if (Input.GetMouseButtonDown(1))
         {
@@ -84,7 +98,8 @@ public class GameLogic : MonoBehaviour
             BottleController bottle = pooler.objectPool.Get();
             // Set name and position
             bottle.name = "bottle-" + i;
-            bottle.transform.position = levelsCollection.LevelCollection[currentLevel].BottlePosition[i];
+            Vector2 xyPos = levelsCollection.LevelCollection[currentLevel].BottlePosition[i];
+            bottle.transform.position = new Vector3(xyPos.x, xyPos.y, transform.position.z);
             if (i < colorCount)
             {
                 SetColorIndicies(bottle);
@@ -284,6 +299,7 @@ public class GameLogic : MonoBehaviour
             StartCoroutine(HUD.Instance.ShowNoMoreMovesOverlayCoroutine());
         }
     }
+
     private void OnDestroy()
     {
         Events.OnGameStateChange -= CheckGameState;

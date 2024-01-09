@@ -41,16 +41,13 @@ public class BottleController : MonoBehaviour
 
     [SerializeField] private ParticleSystem bottleCompleteParticles;
 
-    private Light movablePointlight;
-
 
     private void Awake()
     {
         instanceMaterial = bottleMaskSR.material;
         fillAmount = instanceMaterial.GetFloat("_FillAmount");
 
-        movablePointlight = FindObjectOfType<Light>();
-        movablePointlight.intensity = 0;
+        Events.OnChangeBottleMaterial += ChangeMaterial;
     }
 
     void Start()
@@ -61,12 +58,6 @@ public class BottleController : MonoBehaviour
 
     void Update()
     {
-        // Material change
-
-        if (Input.GetKeyDown(KeyCode.Alpha1)) ChangeMaterial(1); //basic
-        if (Input.GetKeyDown(KeyCode.Alpha2)) ChangeMaterial(2); //metallic
-        if (Input.GetKeyDown(KeyCode.Alpha3)) ChangeMaterial(3); //glittery
-
         if (selected & transform.position != selectedPosition & pouringAnimationStep == 0) // moving up when selected
         {
             transform.position = goTo(selectedPosition, 100.0f);
@@ -359,8 +350,11 @@ public class BottleController : MonoBehaviour
 
     void ChangeMaterial(int matNr)
     {
-        Light movablePointlight = FindObjectOfType<Light>();
-        movablePointlight.intensity = (matNr == 2 ? 1000 : 0);
         instanceMaterial.SetFloat("_MaterialNumber", matNr);
+    }
+
+    private void OnDestroy()
+    {
+        Events.OnChangeBottleMaterial -= ChangeMaterial;
     }
 }

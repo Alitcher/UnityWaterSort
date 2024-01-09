@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Util 
 {
-    private static Random rng = new Random();
+    private static Random rng = new();
     public static void Shuffle<T>(IList<T> list)
     {
         int n = list.Count;

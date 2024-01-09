@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Level4
   m_EditorClassIdentifier: 
   LevelId: 4
+  BGWaterColor: {r: 0.23921567, g: 0.7647059, b: 1, a: 1}
   BottleCount: 7
   BottlePosition:
-  - {x: -45, y: 20, z: 0}
-  - {x: -15, y: 20, z: 0}
-  - {x: 15, y: 20, z: 0}
-  - {x: 45, y: 20, z: 0}
-  - {x: -30, y: -20, z: 0}
-  - {x: 0, y: -20, z: 0}
-  - {x: 30, y: -20, z: 0}
+  - {x: -45, y: 20}
+  - {x: -15, y: 20}
+  - {x: 15, y: 20}
+  - {x: 45, y: 20}
+  - {x: -30, y: -20}
+  - {x: 0, y: -20}
+  - {x: 30, y: -20}
   colorCount: 5

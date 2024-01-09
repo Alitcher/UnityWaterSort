@@ -10,6 +10,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button StartButton;
     [SerializeField] private Button QuitButton;
 
+    [SerializeField] private Color BGWaterColor;
+
     private void Awake()
     {
         if (Instance)
@@ -21,5 +23,10 @@ public class MainMenu : MonoBehaviour
 
         StartButton.onClick.AddListener(() => SceneManager.LoadScene("Game"));
         QuitButton.onClick.AddListener(() => Application.Quit());
+    }
+
+    private void Start()
+    {
+        Events.ChangeBGColor(BGWaterColor);
     }
 }
