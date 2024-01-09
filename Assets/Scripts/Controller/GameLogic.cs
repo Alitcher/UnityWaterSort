@@ -25,7 +25,7 @@ public class GameLogic : MonoBehaviour
     private BottleController selectedBottle;
     private BottleController secondSelectedBottle;
 
-    [SerializeField] private List<int> colorIndiciesPool = new List<int>();
+    [SerializeField] private List<int> colorIndiciesPool = new();
     [SerializeField] private List<BottleController> bottleGameCollection;
 
 
@@ -48,8 +48,9 @@ public class GameLogic : MonoBehaviour
         currentLevel = gameState.GetCurrentLevel();
         transform.position = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z + bottleDistance);
 
+        Events.ChangeBGColor(levelsCollection.LevelCollection[currentLevel].BGWaterColor);
         DestroyAllBottles(); // destroy all bottles before restart the scene
-        GenerateLevel();
+        GenerateLevel(); // make new bottles
         Events.ChangeBottleMaterial(GameState.Instance.GetCurrentShader());
     }
 

@@ -5,7 +5,7 @@ public class UIInteractable : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 {
     // Cursors
     [SerializeField] private Texture2D CursorPointer;
-    [SerializeField] private Vector2 CursorPointerHotspot = new Vector2(25, 20);
+    [SerializeField] private Vector2 CursorPointerHotspot = new(25, 20);
     [SerializeField] private Texture2D CursorDefault;
     [SerializeField] private Vector2 CursorDefaultHotspot = Vector2.zero;
 

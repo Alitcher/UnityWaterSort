@@ -9,11 +9,13 @@ public class LevelConfigEditor : Editor
         serializedObject.Update();
 
         SerializedProperty levelId = serializedObject.FindProperty("LevelId");
+        SerializedProperty BGWaterColor = serializedObject.FindProperty("BGWaterColor");
         SerializedProperty bottleCount = serializedObject.FindProperty("BottleCount");
         SerializedProperty bottlePosition = serializedObject.FindProperty("BottlePosition");
         SerializedProperty colorCount = serializedObject.FindProperty("colorCount");
 
         EditorGUILayout.PropertyField(levelId);
+        EditorGUILayout.PropertyField(BGWaterColor);
         EditorGUILayout.PropertyField(bottleCount);
 
         // Display the BottlePosition array

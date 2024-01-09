@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: Level5
   m_EditorClassIdentifier: 
   LevelId: 5
+  BackgroundColor: {r: 0.23921569, g: 0.8352941, b: 1, a: 1}
   BottleCount: 8
   BottlePosition:
-  - {x: -45, y: 20, z: 200}
-  - {x: -15, y: 20, z: 200}
-  - {x: 15, y: 20, z: 200}
-  - {x: 45, y: 20, z: 200}
-  - {x: -45, y: -20, z: 200}
-  - {x: -15, y: -20, z: 200}
-  - {x: 15, y: -20, z: 200}
-  - {x: 45, y: -20, z: 200}
+  - {x: -45, y: 20}
+  - {x: -15, y: 20}
+  - {x: 15, y: 20}
+  - {x: 45, y: 20}
+  - {x: -45, y: -20}
+  - {x: -15, y: -20}
+  - {x: 15, y: -20}
+  - {x: 45, y: -20}
   colorCount: 6

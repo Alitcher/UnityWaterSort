@@ -41,8 +41,6 @@ public class BottleController : MonoBehaviour
 
     [SerializeField] private ParticleSystem bottleCompleteParticles;
 
-    private Light movablePointlight;
-
 
     private void Awake()
     {

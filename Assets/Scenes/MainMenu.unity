@@ -1718,6 +1718,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartButton: {fileID: 1609435799}
   QuitButton: {fileID: 675990993}
+  BGWaterColor: {r: 0.23921569, g: 0.8352941, b: 1, a: 1}
 --- !u!1 &1155750159
 GameObject:
   m_ObjectHideFlags: 0

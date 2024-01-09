@@ -13,16 +13,17 @@ MonoBehaviour:
   m_Name: Level7
   m_EditorClassIdentifier: 
   LevelId: 7
+  BackgroundColor: {r: 0.23921569, g: 0.8352941, b: 1, a: 1}
   BottleCount: 10
   BottlePosition:
-  - {x: -30, y: 40, z: 200}
-  - {x: 0, y: 40, z: 200}
-  - {x: 30, y: 40, z: 200}
-  - {x: -45, y: 0, z: 200}
-  - {x: -15, y: 0, z: 200}
-  - {x: 15, y: 0, z: 200}
-  - {x: 45, y: 0, z: 200}
-  - {x: -30, y: -40, z: 200}
-  - {x: 0, y: -40, z: 200}
-  - {x: 30, y: -40, z: 200}
+  - {x: -30, y: 40}
+  - {x: 0, y: 40}
+  - {x: 30, y: 40}
+  - {x: -45, y: 0}
+  - {x: -15, y: 0}
+  - {x: 15, y: 0}
+  - {x: 45, y: 0}
+  - {x: -30, y: -40}
+  - {x: 0, y: -40}
+  - {x: 30, y: -40}
   colorCount: 8

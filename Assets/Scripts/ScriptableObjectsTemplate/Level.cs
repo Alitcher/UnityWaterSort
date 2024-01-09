@@ -4,6 +4,7 @@ using UnityEngine;
 public class Level : ScriptableObject
 {
     public string LevelId;
+    public Color BGWaterColor;
     public int BottleCount;
     public Vector2[] BottlePosition; // Array size must equal to BottleCount
 

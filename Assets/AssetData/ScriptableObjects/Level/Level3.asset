@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Level3
   m_EditorClassIdentifier: 
   LevelId: 3
+  BackgroundColor: {r: 0.23921569, g: 0.8352941, b: 1, a: 1}
   BottleCount: 6
   BottlePosition:
-  - {x: -30, y: 20, z: 200}
-  - {x: 0, y: 20, z: 200}
-  - {x: 30, y: 20, z: 200}
-  - {x: -30, y: -20, z: 200}
-  - {x: 0, y: -20, z: 200}
-  - {x: 30, y: -20, z: 200}
+  - {x: -30, y: 20}
+  - {x: 0, y: 20}
+  - {x: 30, y: 20}
+  - {x: -30, y: -20}
+  - {x: 0, y: -20}
+  - {x: 30, y: -20}
   colorCount: 4
