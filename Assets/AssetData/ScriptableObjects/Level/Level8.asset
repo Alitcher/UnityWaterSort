@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level8
   m_EditorClassIdentifier: 
   LevelId: 8
-  BackgroundColor: {r: 0.23921569, g: 0.8352941, b: 1, a: 1}
+  BGWaterColor: {r: 0.20558919, g: 0.67613757, b: 0.7924528, a: 1}
   BottleCount: 11
   BottlePosition:
   - {x: -45, y: 40}

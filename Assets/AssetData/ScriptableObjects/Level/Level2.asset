@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level2
   m_EditorClassIdentifier: 
   LevelId: 2
-  BackgroundColor: {r: 0.23921569, g: 0.8352941, b: 1, a: 1}
+  BGWaterColor: {r: 0.23921567, g: 0.8117647, b: 1, a: 1}
   BottleCount: 5
   BottlePosition:
   - {x: -30, y: 20}
