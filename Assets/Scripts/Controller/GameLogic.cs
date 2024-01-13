@@ -28,6 +28,12 @@ public class GameLogic : MonoBehaviour
     [SerializeField] private List<int> colorIndiciesPool = new();
     [SerializeField] private List<BottleController> bottleGameCollection;
 
+    private bool firstClick = false;
+    private float timeSinceFirstClick = 0.0f;
+
+    private int bottleMaterial = 1;
+    private int nrOfMaterials = 3;
+
 
     #region Reset these value when reset the game
     private int bottleCompleteCount = 0;
@@ -63,9 +69,11 @@ public class GameLogic : MonoBehaviour
 
         // Material change
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) Events.ChangeBottleMaterial(1); //basic
-        if (Input.GetKeyDown(KeyCode.Alpha2)) Events.ChangeBottleMaterial(2); //metallic
-        if (Input.GetKeyDown(KeyCode.Alpha3)) Events.ChangeBottleMaterial(3); //glittery
+        if (Input.GetKeyDown(KeyCode.Alpha1)) ChangeBottleMat(1); //basic
+        if (Input.GetKeyDown(KeyCode.Alpha2)) ChangeBottleMat(2); //metallic
+        if (Input.GetKeyDown(KeyCode.Alpha3)) ChangeBottleMat(3); //glittery
+
+        if (firstClick) timeSinceFirstClick += Time.deltaTime;
 
         #region Debug Control
         if (Input.GetMouseButtonDown(1))
@@ -215,9 +223,29 @@ public class GameLogic : MonoBehaviour
                 // Unselect the currently selected bottle
                 UnSelectSelectedBottle();
             }
-        }
+            else
+            {
+                if (firstClick & timeSinceFirstClick < 0.5f)
+                {
+                    CycleBottleMaterial();
+                }
+                firstClick = !firstClick;
+                timeSinceFirstClick = 0.0f;
+            }
+        } 
+    }
 
-        
+    void CycleBottleMaterial()
+    {
+        bottleMaterial = bottleMaterial == nrOfMaterials ? 1 : (bottleMaterial + 1);
+        print(bottleMaterial);
+        Events.ChangeBottleMaterial(bottleMaterial);
+    }
+
+    void ChangeBottleMat(int materialNr)
+    {
+        bottleMaterial = materialNr;
+        Events.ChangeBottleMaterial(materialNr);
     }
 
     void SetSelectedBottle(BottleController hitBottle)
