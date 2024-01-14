@@ -54,7 +54,6 @@ public class BottleController : MonoBehaviour
 
     void Start()
     {
-        bottleSprite.sortingOrder = 999;
 
         startPosition = transform.position * 1.0f;
         selectedPosition = new Vector3(startPosition.x, startPosition.y + 10f, startPosition.z);
@@ -229,6 +228,7 @@ public class BottleController : MonoBehaviour
 
     public void SetOrderInLayer(int order)
     {
+        bottleSprite.sortingOrder = order + 1;
         bottleMaskSR.sortingOrder = order;
     }
 
