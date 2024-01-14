@@ -143,8 +143,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 3eb7a35fe2f4b63418d1294c6033147c, type: 3}
+  m_SortingOrder: 5
+  m_Sprite: {fileID: 21300000, guid: 5149c0a2b1c3dea4382356af1273a211, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -167,10 +167,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6ee4214c8daa7f46ad11b2381a17e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bottleSprite: {fileID: 7092480846657496171}
   liquidLineRenderer: {fileID: 766939218735496788}
   liquidWidth: 43.5
   bottleColors: {fileID: 11400000, guid: ee2664daeb8d9704c8b16a20cec14225, type: 2}
   bottleMaskSR: {fileID: 7092480847453248015}
+  liquidLineMaterial: {fileID: 2100000, guid: f6cf6034197c5ad47a22e547cb92b138, type: 2}
   waterPivots:
   - {fileID: 9184554255972329176}
   - {fileID: 7815915652690654814}
@@ -264,7 +266,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 1b6b83eee56404846a907175f3961f2c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0762cd87f19972e4aaf7355c13c9bec0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -357,7 +359,7 @@ PrefabInstance:
     - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 18.06
       objectReference: {fileID: 0}
     - target: {fileID: 3551267054866220490, guid: 70aa9e05e33b2284da544db48d09a449,
         type: 3}
@@ -411,6 +413,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6514970366996462445, guid: 70aa9e05e33b2284da544db48d09a449,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6514970366996462445, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -418,7 +425,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: f6cf6034197c5ad47a22e547cb92b138, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70aa9e05e33b2284da544db48d09a449, type: 3}
 --- !u!120 &766939218735496788 stripped
