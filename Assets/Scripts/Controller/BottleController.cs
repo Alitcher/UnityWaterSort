@@ -12,6 +12,7 @@ public class BottleController : MonoBehaviour
     public SpriteRenderer bottleMaskSR;
 
     [NonSerialized] public Material instanceMaterial;
+    [SerializeField] private Material liquidLineMaterial;
 
     private bool pouring = false; // true while selected bottles pouringAnimationStep != 0
     private bool selected = false; // true when selected, false when pouringAnimationStep != 0
@@ -54,6 +55,7 @@ public class BottleController : MonoBehaviour
     {
         startPosition = transform.position * 1.0f;
         selectedPosition = new Vector3(startPosition.x, startPosition.y + 10f, startPosition.z);
+        liquidLineRenderer.material = liquidLineMaterial;
     }
 
     void Update()
@@ -197,11 +199,12 @@ public class BottleController : MonoBehaviour
 
     private void SetActiveLiquidLine()
     {
-        liquidLineRenderer.startColor = bottleColors.colors[TopColor()]; // set color here
-        liquidLineRenderer.endColor = bottleColors.colors[TopColor()];// set color here
+        //liquidLineRenderer.startColor = bottleColors.colors[TopColor()]; // set color here
+        //liquidLineRenderer.endColor = bottleColors.colors[TopColor()];// set color here
+        liquidLineRenderer.material.SetColor("_C1", bottleColors.colors[TopColor()]);
         liquidLineRenderer.SetPosition(0, rotationPivot);
         liquidLineRenderer.SetPosition(1, rotationPivot - Vector3.up * liquidWidth);
-
+        liquidLineRenderer.material.SetInt("_MaterialNumber", GameState.Instance.GetCurrentShader());
         liquidLineRenderer.enabled = true;
     }
 
@@ -351,6 +354,7 @@ public class BottleController : MonoBehaviour
     void ChangeMaterial(int matNr)
     {
         instanceMaterial.SetFloat("_MaterialNumber", matNr);
+
     }
 
     private void OnDestroy()
