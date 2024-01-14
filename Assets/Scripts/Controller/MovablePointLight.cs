@@ -34,6 +34,7 @@ public class MovablePointLight : MonoBehaviour
         if (onHandheldDevice)
         {
             //TODO(henrik) move pointlight for metallic with gyro
+            transform.position = new(Input.GetAxis("horizontal"), Input.GetAxis("vertical"), 0.0f);
         }
         else
         {
