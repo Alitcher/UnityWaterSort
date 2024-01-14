@@ -6,6 +6,7 @@ using UnityEngine.Pool;
 
 public class BottleController : MonoBehaviour
 {
+    [SerializeField] private SpriteRenderer bottleSprite;
     [SerializeField] private LineRenderer liquidLineRenderer;
     [SerializeField] private float liquidWidth;
     public ColorSet bottleColors;
@@ -53,6 +54,8 @@ public class BottleController : MonoBehaviour
 
     void Start()
     {
+        bottleSprite.sortingOrder = 999;
+
         startPosition = transform.position * 1.0f;
         selectedPosition = new Vector3(startPosition.x, startPosition.y + 10f, startPosition.z);
         liquidLineRenderer.material = liquidLineMaterial;
@@ -92,7 +95,7 @@ public class BottleController : MonoBehaviour
             transform.position = goTo(startPosition, 250.0f);
             if (transform.position == startPosition)
             {
-                SetOrderInLayer(0);
+                SetOrderInLayer(5);
                 pouring = false;
                 targetBottle.pouring = false;
                 instanceMaterial.SetFloat("_SARM", 1.0f);
@@ -199,8 +202,8 @@ public class BottleController : MonoBehaviour
 
     private void SetActiveLiquidLine()
     {
-        //liquidLineRenderer.startColor = bottleColors.colors[TopColor()]; // set color here
-        //liquidLineRenderer.endColor = bottleColors.colors[TopColor()];// set color here
+        liquidLineRenderer.startColor = bottleColors.colors[TopColor()]; // set color here
+        liquidLineRenderer.endColor = bottleColors.colors[TopColor()];// set color here
         liquidLineRenderer.material.SetColor("_C1", bottleColors.colors[TopColor()]);
         liquidLineRenderer.SetPosition(0, rotationPivot);
         liquidLineRenderer.SetPosition(1, rotationPivot - Vector3.up * liquidWidth);
@@ -226,7 +229,6 @@ public class BottleController : MonoBehaviour
 
     public void SetOrderInLayer(int order)
     {
-        GetComponent<SpriteRenderer>().sortingOrder = order;
         bottleMaskSR.sortingOrder = order;
     }
 
