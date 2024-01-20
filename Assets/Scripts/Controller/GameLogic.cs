@@ -75,6 +75,7 @@ public class GameLogic : MonoBehaviour
 
         if (firstClick) timeSinceFirstClick += Time.deltaTime;
 
+#if UNITY_EDITOR_WIN
         #region Debug Control
         if (Input.GetMouseButtonDown(1))
         {
@@ -89,6 +90,7 @@ public class GameLogic : MonoBehaviour
             SceneManager.LoadScene("Game");
         }
         #endregion
+#endif
     }
 
     public void GenerateLevel()
