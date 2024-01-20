@@ -172,7 +172,6 @@ MonoBehaviour:
   liquidWidth: 43.5
   bottleColors: {fileID: 11400000, guid: ee2664daeb8d9704c8b16a20cec14225, type: 2}
   bottleMaskSR: {fileID: 7092480847453248015}
-  liquidLineMaterial: {fileID: 2100000, guid: f6cf6034197c5ad47a22e547cb92b138, type: 2}
   waterPivots:
   - {fileID: 9184554255972329176}
   - {fileID: 7815915652690654814}
@@ -406,6 +405,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LiquidLine
       objectReference: {fileID: 0}
+    - target: {fileID: 4780134382294389277, guid: 70aa9e05e33b2284da544db48d09a449,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6514970366996462445, guid: 70aa9e05e33b2284da544db48d09a449,
         type: 3}
       propertyPath: m_Loop
@@ -506,6 +510,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BottleCompleteParticles
+      objectReference: {fileID: 0}
+    - target: {fileID: 5242079071113147357, guid: 2fea2d353376e3e45aab1180a7079177,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2fea2d353376e3e45aab1180a7079177, type: 3}

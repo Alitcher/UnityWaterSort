@@ -1328,7 +1328,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2047,7 +2047,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3783009674ae7a046b6115363cf0368b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< Updated upstream
   _currentLevel: 6
+=======
+  _currentLevel: 10
+>>>>>>> Stashed changes
   _currentShader: 1
 --- !u!4 &1161416043
 Transform:
@@ -2077,7 +2081,7 @@ GameObject:
   - component: {fileID: 1184568327}
   - component: {fileID: 1184568326}
   m_Layer: 0
-  m_Name: MovablePointLight
+  m_Name: MovableSpotLight
   m_TagString: MovablePointLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2095,7 +2099,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56f79d0887c370b4abcdba822fb01e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightDistance: 5
+  globalvolume: {fileID: 0}
+  _bottlesLight: {fileID: 991408286}
 --- !u!114 &1184568327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2125,13 +2130,13 @@ Light:
   m_GameObject: {fileID: 1184568325}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 2
+  m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 0
-  m_Range: 100
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
+  m_Range: 500
+  m_SpotAngle: 179
+  m_InnerSpotAngle: 179
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
@@ -2170,7 +2175,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 10
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -2186,7 +2191,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1184568325}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -6.4, y: 41.7, z: 50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
