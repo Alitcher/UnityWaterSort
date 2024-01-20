@@ -8,7 +8,6 @@ public class LightsController : MonoBehaviour
     private Light _light;
     private float distanceToLightTarget;
 
-    [SerializeField] private Volume globalvolume;
     [SerializeField] private Light _bottlesLight;
 
     private bool onHandheldDevice;
