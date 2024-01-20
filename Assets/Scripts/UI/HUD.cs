@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HUD : MonoBehaviour
 {
@@ -33,6 +34,11 @@ public class HUD : MonoBehaviour
     public void ToggleEscMenu()
     {
         EscMenu.SetActive(!EscMenu.activeSelf);
+    }
+
+    public void MainMenu() 
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
     public IEnumerator ShowNoMoreMovesOverlayCoroutine()
