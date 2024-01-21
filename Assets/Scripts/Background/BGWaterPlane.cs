@@ -15,8 +15,8 @@ public class BGWaterPlane : MonoBehaviour
     {
         // Modify these variables to change the texture
         int textureWidth = 256;
-        float[] colorPositions = new float[] {0, 0.15f, 1};
-        float[] colorIntensities = new float[] {1, 0.75f, 0.1f};
+        float[] colorPositions = new float[] {0, 0.01f, 0.15f, 1};
+        float[] colorIntensities = new float[] {2, 1, 0.75f, 0.1f};
 
 
         // Creating colors

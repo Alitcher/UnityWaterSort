@@ -9,9 +9,12 @@ public class RandomSeaFloor : MonoBehaviour
     public AnimationCurve heightCurve;
     private Vector3[] vertices;
     private int[] triangles;
+    private Vector2[] uvs;
 
     public int xSize;
     public int zSize;
+
+    public float normalUVScaleFactor;
 
     /// <summary>
     /// A higher value captures a smaller area of perlin noise, so appears smoother
@@ -61,7 +64,9 @@ public class RandomSeaFloor : MonoBehaviour
 
         if (smoothness <= 0) smoothness = 1;
 
-        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+        int noOfVertices = (xSize + 1) * (zSize + 1);
+        vertices = new Vector3[noOfVertices];
+        uvs = new Vector2[noOfVertices];
 
         for (int i = 0, z = 0; z <= zSize; z++)
         {
@@ -69,6 +74,7 @@ public class RandomSeaFloor : MonoBehaviour
             {
                 float noiseHeight = GenerateNoiseHeight(z, x, octaveOffsets);
                 vertices[i] = new Vector3(x - xSize / 2.0f, noiseHeight, z - zSize / 2.0f);
+                uvs[i] = new Vector2(x / normalUVScaleFactor, z / normalUVScaleFactor);
                 i++;
             }
         }
@@ -140,6 +146,7 @@ public class RandomSeaFloor : MonoBehaviour
         mesh.Clear();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
+        mesh.uv = uvs;
         mesh.RecalculateNormals();
         mesh.RecalculateTangents();
         GetComponent<MeshCollider>().sharedMesh = mesh;
