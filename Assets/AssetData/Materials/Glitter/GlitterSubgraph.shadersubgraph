@@ -134,7 +134,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "_rotSpeedMin",
     "m_StageCapability": 3,
-    "m_Value": -0.5,
+    "m_Value": -0.009999999776482582,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
@@ -149,8 +149,33 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "_noiseScale",
     "m_StageCapability": 3,
-    "m_Value": 11.600000381469727,
+    "m_Value": 100.0,
     "m_DefaultValue": 0.0,
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
+    "m_ObjectId": "77cf1af4864a43ba906dfa6700f20503",
+    "m_Id": 112241615,
+    "m_DisplayName": "InnerColor",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_InnerColor",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0,
+        "w": 1.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
     "m_Labels": []
 }
 
@@ -189,7 +214,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "_rotSpeedMax",
     "m_StageCapability": 3,
-    "m_Value": 0.10000000149011612,
+    "m_Value": 0.009999999776482582,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
@@ -231,6 +256,9 @@
             "m_Id": "9ce370bce5fb427eb2278b2c51d92d73"
         },
         {
+            "m_Id": "77cf1af4864a43ba906dfa6700f20503"
+        },
+        {
             "m_Id": "8bf06164c6c74e55aca417dba0fe022e"
         }
     ],
@@ -245,12 +273,14 @@
     "m_PropertyGuids": [
         "e9978009-a687-4f05-b4a7-a9f2cc0b6b14",
         "8afd92b3-b9ae-423a-b688-b74bea3a3696",
-        "280d66ca-f0d2-44a2-a63e-6f67eb1a2460"
+        "280d66ca-f0d2-44a2-a63e-6f67eb1a2460",
+        "730d66fc-2ad0-461c-9d44-ad067ea30c35"
     ],
     "m_PropertyIds": [
         1079020278,
         356948289,
-        1810149973
+        1810149973,
+        112241615
     ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
