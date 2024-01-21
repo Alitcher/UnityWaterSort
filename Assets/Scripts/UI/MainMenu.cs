@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button QuitButton;
 
     [SerializeField] private Color BGWaterColor;
+
+    [SerializeField] private TextMeshProUGUI versionText;
 
     private void Awake()
     {
@@ -27,6 +30,7 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
+        versionText.text = $"version: {Application.version}";
         Events.ChangeBGColor(BGWaterColor);
     }
 }

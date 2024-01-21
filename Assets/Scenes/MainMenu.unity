@@ -911,6 +911,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &564075952 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2478394674776748089, guid: a10dd27f8e6fbeb4189a66fb0baca365,
+    type: 3}
+  m_PrefabInstance: {fileID: 944940023}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &579242347
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1293,7 +1305,64 @@ PrefabInstance:
     - target: {fileID: 2478394674776748089, guid: a10dd27f8e6fbeb4189a66fb0baca365,
         type: 3}
       propertyPath: m_text
+      value: Version 1.0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478394674776748089, guid: a10dd27f8e6fbeb4189a66fb0baca365,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 12.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478394674776748089, guid: a10dd27f8e6fbeb4189a66fb0baca365,
+        type: 3}
+      propertyPath: m_fontAsset
       value: 
+      objectReference: {fileID: 11400000, guid: f55f5fdc89c5cbd43b0634db305e7279,
+        type: 2}
+    - target: {fileID: 2478394674776748089, guid: a10dd27f8e6fbeb4189a66fb0baca365,
+        type: 3}
+      propertyPath: m_fontStyle
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478394674776748089, guid: a10dd27f8e6fbeb4189a66fb0baca365,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 12.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478394674776748089, guid: a10dd27f8e6fbeb4189a66fb0baca365,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -6266564982130039212, guid: f55f5fdc89c5cbd43b0634db305e7279,
+        type: 2}
+    - target: {fileID: 2478394674776748089, guid: a10dd27f8e6fbeb4189a66fb0baca365,
+        type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478394674776748089, guid: a10dd27f8e6fbeb4189a66fb0baca365,
+        type: 3}
+      propertyPath: m_fontColorGradientPreset
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478394674776748090, guid: a10dd27f8e6fbeb4189a66fb0baca365,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -20.7882
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478394674776748090, guid: a10dd27f8e6fbeb4189a66fb0baca365,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -160.7306
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478394674776748090, guid: a10dd27f8e6fbeb4189a66fb0baca365,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -10.394099
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478394674776748090, guid: a10dd27f8e6fbeb4189a66fb0baca365,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -114.78764
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a10dd27f8e6fbeb4189a66fb0baca365, type: 3}
@@ -1719,6 +1788,7 @@ MonoBehaviour:
   StartButton: {fileID: 1609435799}
   QuitButton: {fileID: 675990993}
   BGWaterColor: {r: 0.23921569, g: 0.8352941, b: 1, a: 1}
+  versionText: {fileID: 564075952}
 --- !u!1 &1155750159
 GameObject:
   m_ObjectHideFlags: 0
