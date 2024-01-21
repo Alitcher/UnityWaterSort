@@ -21,14 +21,25 @@ public class LightsController : MonoBehaviour
     private void Start()
     {
         onHandheldDevice = SystemInfo.deviceType == DeviceType.Handheld;
+        if (onHandheldDevice)
+        {
+            Input.gyro.enabled = true; // If you want to use the gyroscope
+        }
     }
 
     void Update()
     {
         if (onHandheldDevice)
         {
-            //TODO(henrik) move pointlight for metallic with gyro
-            transform.position = new(Input.GetAxis("horizontal"), Input.GetAxis("vertical"), 190.0f);
+            // Get the device acceleration
+            Vector3 acceleration = Input.acceleration;
+
+            // Optionally, you can smooth the movement or apply some sensitivity factor
+            float sensitivity = 50.0f; // Adjust this value to your liking
+            Vector3 smoothPosition = new Vector3(acceleration.x * sensitivity, acceleration.y * sensitivity, 190.0f);
+
+            // Assign the position to the light
+            transform.position = smoothPosition;
         }
         else
         {
