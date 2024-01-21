@@ -437,7 +437,7 @@ RectTransform:
   - {fileID: 422457609}
   - {fileID: 219359016}
   m_Father: {fileID: 362150270}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -899,11 +899,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2123475835}
   - {fileID: 1451698902}
   - {fileID: 814436450}
   - {fileID: 172281858}
   - {fileID: 2000012649}
+  - {fileID: 2123475835}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1652,7 +1652,7 @@ RectTransform:
   - {fileID: 226433785}
   - {fileID: 1629034913}
   m_Father: {fileID: 362150270}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2036,7 +2036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3783009674ae7a046b6115363cf0368b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentLevel: 1
+  _currentLevel: 10
   _currentShader: 1
 --- !u!4 &1161416043
 Transform:
@@ -2465,7 +2465,7 @@ PrefabInstance:
     - target: {fileID: 5813525694581466278, guid: 8889869fc608b8e48812ac7b94d3aff7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5813525694581466278, guid: 8889869fc608b8e48812ac7b94d3aff7,
         type: 3}
@@ -3029,7 +3029,7 @@ RectTransform:
   - {fileID: 742244548}
   - {fileID: 1642194503}
   m_Father: {fileID: 362150270}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3220,7 +3220,7 @@ PrefabInstance:
     - target: {fileID: 2063291496507116822, guid: 311cd8348717c5a4c95ffd65e145789c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2063291496507116822, guid: 311cd8348717c5a4c95ffd65e145789c,
         type: 3}
