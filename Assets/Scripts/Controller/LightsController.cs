@@ -36,10 +36,14 @@ public class LightsController : MonoBehaviour
 
             // Optionally, you can smooth the movement or apply some sensitivity factor
             float sensitivity = 50.0f; // Adjust this value to your liking
-            Vector3 smoothPosition = new Vector3(acceleration.x * sensitivity, acceleration.y * sensitivity, 190.0f);
+            Vector3 smoothPosition = new Vector3(
+                Mathf.Clamp(acceleration.x * sensitivity, -75.0f, 75.0f),
+                Mathf.Clamp(acceleration.y * sensitivity, -75.0f, 75.0f),
+                190.0f);
 
             // Assign the position to the light
             transform.position = smoothPosition;
+            print(smoothPosition);
         }
         else
         {

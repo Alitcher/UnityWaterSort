@@ -62,10 +62,7 @@ public class GameLogic : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            HandleBottleMovement();
-        }
+        if (Input.GetMouseButtonDown(0)) HandleBottleMovement();
 
         // Material change
 
@@ -97,7 +94,7 @@ public class GameLogic : MonoBehaviour
     {
         int bottleCount = levelsCollection.LevelCollection[currentLevel].BottleCount;
         int colorCount = levelsCollection.LevelCollection[currentLevel].colorCount;
-        int numberOfEmptyBottles = bottleCount - colorCount;
+        //int numberOfEmptyBottles = bottleCount - colorCount;
         
         GenerateColorsForLevel(colorCount);
 
