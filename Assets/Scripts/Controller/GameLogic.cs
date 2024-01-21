@@ -32,7 +32,7 @@ public class GameLogic : MonoBehaviour
     private float timeSinceFirstClick = 0.0f;
 
     private int bottleMaterial = 1;
-    private int nrOfMaterials = 3;
+    private int nrOfMaterials = 4;
 
 
     #region Reset these value when reset the game
@@ -69,6 +69,7 @@ public class GameLogic : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1)) ChangeBottleMat(1); //basic
         if (Input.GetKeyDown(KeyCode.Alpha2)) ChangeBottleMat(2); //metallic
         if (Input.GetKeyDown(KeyCode.Alpha3)) ChangeBottleMat(3); //glittery
+        if (Input.GetKeyDown(KeyCode.Alpha4)) ChangeBottleMat(4); //crystalline
 
         if (firstClick) timeSinceFirstClick += Time.deltaTime;
 
@@ -224,7 +225,7 @@ public class GameLogic : MonoBehaviour
             }
             else
             {
-                if (firstClick & timeSinceFirstClick < 0.5f)
+                if (firstClick & timeSinceFirstClick < 1.0f)
                 {
                     CycleBottleMaterial();
                 }

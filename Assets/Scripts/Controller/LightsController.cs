@@ -59,8 +59,8 @@ public class LightsController : MonoBehaviour
 
     void ChangeBottleMaterial(int matNr)
     {
-        _light.intensity = matNr == 2 ? 1000 : 0;
-        _bottlesLight.gameObject.SetActive(matNr != 2);
+        _light.intensity = ((matNr == 2) | (matNr == 4)) ? 1000 : 0;
+        _bottlesLight.gameObject.SetActive((matNr == 1) | (matNr == 3));
     }
 
     private void OnDestroy()
