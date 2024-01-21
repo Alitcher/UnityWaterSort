@@ -227,6 +227,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   xSize: 192
   zSize: 48
+  normalUVScaleFactor: 15
   smoothness: 50
   octaves: 5
   lacunarity: 2
