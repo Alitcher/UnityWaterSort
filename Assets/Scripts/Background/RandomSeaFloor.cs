@@ -25,6 +25,14 @@ public class RandomSeaFloor : MonoBehaviour
     /// Higher value means perlin noise layers get more granular quicker
     /// </summary>
     public float lacunarity;
+    /// <summary>
+    /// Maximum height of the generated terrain. Used for scaling it up or down to the desired range (the height var)
+    /// </summary>
+    private float maxHeight;
+    /// <summary>
+    /// Determines how high the seascape will be (scale Y)
+    /// </summary>
+    public float height;
 
     private int seed;
     /// <summary>
@@ -98,7 +106,7 @@ public class RandomSeaFloor : MonoBehaviour
             frequency *= lacunarity;
             amplitude *= persistence;
         }
-        noiseHeight = Mathf.Min(noiseHeight, 10); // The value will probably never be this large, but we need to make sure of it for the shader graph
+        maxHeight = Mathf.Max(noiseHeight, maxHeight); // Keeping track of the highest point we've found so far
         return noiseHeight;
     }
 
@@ -136,6 +144,6 @@ public class RandomSeaFloor : MonoBehaviour
         mesh.RecalculateTangents();
         GetComponent<MeshCollider>().sharedMesh = mesh;
 
-        gameObject.transform.localScale = new Vector3(scale, scale, scale);
+        gameObject.transform.localScale = new Vector3(scale, height / maxHeight, scale);
     }
 }
